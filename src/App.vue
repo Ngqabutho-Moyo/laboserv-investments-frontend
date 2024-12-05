@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/block-lang -->
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
+// import { RouterView } from 'vue-router';
+
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import { RouterView } from 'vue-router';
   <header>
     <Navbar></Navbar>
     <RouterView></RouterView>
+    <!-- <h1>Testing API endpoints</h1> -->
   </header>
 </template>
 

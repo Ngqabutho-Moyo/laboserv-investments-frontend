@@ -21,7 +21,7 @@ defineProps({
     <p class="my-4 text-xl text-black">
       {{ subtitle }}
     </p>
-    <section class="bg-center bg-no-repeat h-screen " style="background-image: url('src/assets/img/laboserv3.png');">
-    </section>
+    <!-- <section class="bg-center bg-no-repeat h-screen " style="background-image: url('src/assets/img/laboserv3.png');">
+    </section> -->
   </div>
 </template>
