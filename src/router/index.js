@@ -1,13 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import EmployeesView from '@/views/EmployeesView.vue'
-import PayslipEntriesView from '@/views/PayslipEntriesView.vue'
-import PayslipEntryView from '@/views/PayslipEntryView.vue'
 import AuditTrailView from '@/views/AuditTrailView.vue'
 import HelpView from '@/views/HelpView.vue'
-import ProcessPayrollView from '@/views/ProcessPayrollView2.vue'
+import ProcessPayrollView from '@/views/ProcessPayrollView.vue'
 import TaxAndOtherTablesView from '@/views/TaxAndOtherTablesView.vue'
 import CreateNewPayrollView from '@/views/Payroll Files/CreateNewPayrollView.vue'
+import CreateNewEmployeeView from '@/views/Employees/CreateNewEmployeeView.vue'
+import ViewExistingEmployeesView from '@/views/Employees/ViewExistingEmployeesView.vue'
+import PayrollSummariesView from '@/views/Reports/PayrollSummariesView.vue'
+import TaxTablesView from '@/views/Tax and Other Tables/TaxTablesView.vue'
+import OpenExistingPayrollView from '@/views/Payroll Files/OpenExistingPayrollView.vue'
+import UpdateEmployeeView from '@/views/Employees/UpdateEmployeeView.vue'
+import UpdatePayrollView from '@/views/Payroll Files/UpdatePayrollView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,20 +21,36 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+
     {
-      path: '/employees',
-      name: 'employees',
-      component: EmployeesView,
+      path: '/payroll-summaries',
+      name: 'payroll-summmaries',
+      component: PayrollSummariesView,
     },
     {
-      path: '/payslip-entries',
-      name: 'payslip-entries',
-      component: PayslipEntriesView,
+      path: '/create-employee',
+      name: 'create-employee',
+      component: CreateNewEmployeeView,
     },
     {
-      path: '/payslip-entry',
-      name: 'payslip-entry',
-      component: PayslipEntryView,
+      path: '/view-existing-employees',
+      name: 'view-existing-employees',
+      component: ViewExistingEmployeesView,
+    },
+    {
+      path: '/update-employee',
+      name: 'update-employee',
+      component: UpdateEmployeeView,
+    },
+    {
+      path: '/open-existing-payroll',
+      name: 'open-existing-payroll',
+      component: OpenExistingPayrollView,
+    },
+    {
+      path: '/update-payroll',
+      name: 'update-payroll',
+      component: UpdatePayrollView,
     },
     {
       path: '/audit-trail',
@@ -51,6 +71,11 @@ const router = createRouter({
       path: '/tax-and-other-tables',
       name: 'tax-and-other-tables',
       component: TaxAndOtherTablesView,
+    },
+    {
+      path: '/tax-tables',
+      name: 'tax-tables',
+      component: TaxTablesView,
     },
     {
       path: '/audit-trail',

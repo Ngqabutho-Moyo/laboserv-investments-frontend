@@ -8,6 +8,7 @@ export default {
   name: 'navbar',
   components: {
     Dropdown,
+    RouterLink
   },
   data: () => {
     return {
@@ -37,6 +38,10 @@ export default {
           link: 'create-new-payroll',
         },
         {
+          title: 'Update Existing Payroll',
+          link: 'update-payroll',
+        },
+        {
           title: 'Create Backup Files',
           link: '#',
         },
@@ -46,17 +51,31 @@ export default {
         },
         {
           title: 'Open Existing Payroll',
-          link: '#',
+          link: 'open-existing-payroll',
+        },
+      ],
+      employees: [
+        {
+          title: 'Create New Employee',
+          link: 'create-employee',
         },
         {
-          title: 'Open Existing Payroll',
+          title: 'View Existing Employees',
+          link: 'view-existing-employees',
+        },
+        {
+          title: 'Update Employee',
+          link: 'update-employee',
+        },
+        {
+          title: 'Delete Employee',
           link: '#',
         },
       ],
       taxAndOtherTables: [
         {
           title: 'Tax Tables',
-          link: '#'
+          link: 'tax-tables'
         },
         {
           title: 'Employee/Employer Contributions',
@@ -89,6 +108,10 @@ export default {
           link: '#'
         },
         {
+          title: 'Payroll Summaries',
+          link: 'payroll-summaries'
+        },
+        {
           title: 'Non-categorized Period Summaries',
           link: '#'
         },
@@ -107,17 +130,15 @@ export default {
 </script>
 
 <template>
-  <nav class="bg-sky-300 border-b border-blue-500">
+  <nav class="bg-sky-300 border-b">
     <!-- <img class="h-10 w-auto" v-bind:src="logo" alt="laboserv"> -->
     <div class="menu-item">
       <RouterLink to="/">Home</RouterLink>
     </div>
     <Dropdown title="Payroll Files" :items="payrollFiles"></Dropdown>
+    <Dropdown title="Employees" :items="employees"></Dropdown>
     <div class="menu-item">
-      <RouterLink to="/employees">Employees</RouterLink>
-    </div>
-    <div class="menu-item">
-      <RouterLink to="payslip-entries">Payslip Entries</RouterLink>
+      <RouterLink to="#">Payslip Entries</RouterLink>
     </div>
     <Dropdown title="Tax and Other Tables" :items="taxAndOtherTables"></Dropdown>
     <div class="menu-item">
@@ -135,14 +156,15 @@ export default {
 
 <style>
 nav {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 nav .menu-item {
   color: lightblue;
-  padding: 10px 20px;
+  padding: 10px 30px;
   position: relative;
   text-align: center;
   border-bottom: 3px solid transparent;

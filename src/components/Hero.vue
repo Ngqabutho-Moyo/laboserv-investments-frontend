@@ -18,10 +18,8 @@ defineProps({
     <h1 class="text-4xl font-extrabold text-black sm:text-5xl md:text-6xl">
       {{ title }}
     </h1>
-    <p class="my-4 text-xl text-black">
+    <!-- <p class="my-4 text-xl text-black">
       {{ subtitle }}
-    </p>
-    <!-- <section class="bg-center bg-no-repeat h-screen " style="background-image: url('src/assets/img/laboserv3.png');">
-    </section> -->
+    </p> -->
   </div>
 </template>

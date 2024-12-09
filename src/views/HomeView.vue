@@ -7,5 +7,10 @@ import Hero from '@/components/Hero.vue';
   <div class="mb-10">
     <Navbar></Navbar>
   </div>
-  <Hero title="Home"></Hero>
+  <div>
+    <Hero title="Home"></Hero>
+    <section class="bg-center bg-no-repeat h-screen bg-contain "
+      style="background-image: url('src/assets/img/laboserv3.png');">
+    </section>
+  </div>
 </template>

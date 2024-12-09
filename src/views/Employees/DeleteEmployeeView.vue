@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Navbar from '@/components/Navbar.vue';
-import Form from '@/components/Form.vue';
-
+import Hero from '@/components/Hero.vue';
 </script>
 
 <template>
@@ -9,7 +8,6 @@ import Form from '@/components/Form.vue';
     <Navbar></Navbar>
   </div>
   <div class="mb-10">
-    <Form title="Process Payroll"></Form>
+    <Hero title="Delete Employee"></Hero>
   </div>
-
 </template>
