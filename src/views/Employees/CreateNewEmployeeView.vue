@@ -14,7 +14,7 @@ defineProps({
 })
 
 const toast = useToast()
-const url = 'http://localhost:5000/api/employees/create'
+const postEmployeeURL = 'http://localhost:5000/api/employees/create'
 
 const form = reactive({
   ssrNumber: null,
@@ -28,13 +28,11 @@ const form = reactive({
   startDate: null,
   endDate: null,
   pobsInsurableEarnings: null,
-  // pobsContribution: null,
-  // basicAPWCS: null,
   actualInsurableEarnings: null
 })
 
 const handleSubmit = async () => {
-  axios.post(url, form).then(() => {
+  axios.post(postEmployeeURL, form).then(() => {
     toast.success('Employee added successfully!')
     router.push('/')
   }).catch((error) => {
@@ -92,9 +90,8 @@ input[type=number] {
           <div class="mb-4 grid grid-cols-2 gap-2">
             <input type="number" v-model="form.period" id="period" name="period"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Period" required>
-            <input type="text" onmouseover="(this.type='date')" onmouseleave="(this.type='text')"
-              v-model="form.birthDate" id="birthDate" name="birthDate" class="border rounded w-full py-2 px-3 mb-2"
-              placeholder="Birth Date" required>
+            <input type="text" v-model="form.birthDate" id="birthDate" name="birthDate"
+              class="border rounded w-full py-2 px-3 mb-2" placeholder="Birth Date (yyyy-mm-dd)" required>
           </div>
 
           <!-- 3rd row -->
@@ -107,11 +104,10 @@ input[type=number] {
 
           <!-- 4th row -->
           <div class="mb-4 grid grid-cols-2 gap-2">
-            <input type="text" onmouseover="(this.type='date')" onmouseleave="(this.type='text')"
-              v-model="form.startDate" id="startDate" name="startDate" class="border rounded w-full py-2 px-3 mb-2"
-              placeholder="Start Date" required>
-            <input type="text" onmouseover="(this.type='date')" onmouseleave="(this.type='text')" v-model="form.endDate"
-              id="endDate" name="endDate" class="border rounded w-full py-2 px-3 mb-2" placeholder="End Date">
+            <input type="text" v-model="form.startDate" id="startDate" name="startDate"
+              class="border rounded w-full py-2 px-3 mb-2" placeholder="Start Date (yyyy-mm-dd)" required>
+            <input type="text" v-model="form.endDate" id="endDate" name="endDate"
+              class="border rounded w-full py-2 px-3 mb-2" placeholder="End Date (yyyy-mm-dd)">
           </div>
 
           <!-- 5th row -->

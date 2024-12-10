@@ -69,7 +69,7 @@ export default {
         },
         {
           title: 'Delete Employee',
-          link: '#',
+          link: 'delete-employee',
         },
       ],
       taxAndOtherTables: [

@@ -34,15 +34,24 @@ export default {
   </div>
   <div class="mt-15 grid grid-cols-3 gap-3">
     <!-- Logo and address -->
-    <img v-bind:src="'/src/assets/img/laboserv4.png'">
+    <!-- <img v-bind:src="'/src/assets/img/laboserv4.png'">
     <div>
       <p><strong>Laboserv Investments P/L</strong></p>
       <p>33 Western Road</p>
       <p>Greendale</p>
       <p>Harare</p>
-    </div>
+    </div> -->
   </div>
-  <div class='mt-10' v-for="data in jsonData" :key="data">
+  <div class='mb-5' v-for="data in jsonData" :key="data">
+    <div class="mb-4 grid grid-cols-3 gap-3">
+      <img v-bind:src="'/src/assets/img/laboserv4.png'">
+      <div>
+        <p><strong>Laboserv Investments P/L</strong></p>
+        <p>33 Western Road</p>
+        <p>Greendale</p>
+        <p>Harare</p>
+      </div>
+    </div>
     <!-- 1st row -->
     <div class="mb-4 grid grid-cols-3 gap-3">
       <p><strong>First Names:</strong> {{ data['firstName'] }}</p>
@@ -74,38 +83,38 @@ export default {
       <p><strong>Account No.: </strong> {{ data['accountNumber'] }}</p>
     </div>
     <hr>
-    <table>
+    <table id="'only-css'">
       <tbody>
         <tr>
           <td>Days 22 @5.91 basic</td>
-          <td>{{ data['basePay'] }}</td>
+          <td style="text-align: right">{{ data['basePay'] }}</td>
           <td style="color: red;">PAYE USD:</td>
-          <td style="color: red;">{{ data['payeUSD'] }}</td>
+          <td style="color: red; text-align: right;">{{ parseFloat(data['payeUSD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Housing Allowance USD:</td>
-          <td>{{ data['basePay'] }}</td>
+          <td style="text-align:right;">{{ data['basePay'] }}</td>
           <td style="color:red">AIDS Levy USD:</td>
-          <td style="color: red;">{{ data['aidsLevyUSD'] }}</td>
+          <td style="color: red; text-align: right;">{{ parseFloat(data['aidsLevyUSD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Transport Allowance USD:</td>
-          <td>{{ data['transportAllowance'] }}</td>
+          <td style="text-align:right;">{{ parseFloat(data['transportAllowance']).toFixed(2) }}</td>
           <td style="color:red">NSSA USD:</td>
-          <td style="color:red">{{ data['nssaLevyUSD'] }}</td>
+          <td style="color:red; text-align: right">{{ parseFloat(data['nssaLevyUSD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Commission USD:</td>
-          <td>{{ data['commission'] }}</td>
+          <td style="text-align:right;">{{ data['commission'] }}</td>
           <td style="color:red"></td>
           <td style="color:red"></td>
         </tr>
         <br>
         <tr>
           <td>Gross USD: (IBR=25.5893)</td>
-          <td>{{ data['grossPay'] }}</td>
+          <td style="text-align:right;">{{ data['grossPay'] }}</td>
           <td style="color:red">Total Deductions USD:</td>
-          <td style="color:red">{{ data['totalDeductionsUSD'] }}</td>
+          <td style="color:red;text-align: right;">{{ parseFloat(data['totalDeductionsUSD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>NSSA Ceiling=17,912.51</td>
@@ -117,7 +126,7 @@ export default {
           <td></td>
           <td></td>
           <td>Nett Pay USD:</td>
-          <td>{{ data['netPayUSD'] }}</td>
+          <td style="text-align:right;">{{ parseFloat(data['netPayUSD']).toFixed(2) }}</td>
         </tr>
       </tbody>
     </table>

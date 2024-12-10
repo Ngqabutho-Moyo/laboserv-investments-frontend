@@ -23,15 +23,18 @@ const getPayrollsURL = 'http://localhost:5000/api/payrolls'
 
 const updatePayrollForm = reactive({
   idNumber: '',
+  basePay: '',
   housingAllowance: '',
   transportAllowance: '',
   commission: ''
 })
 
 let payrollToUpdate: object
+let employeeToUpdate: object
 
 const handleSubmit = async () => {
   const idNumber = updatePayrollForm['idNumber']
+  const basePay = parseInt(updatePayrollForm['basePay'])
   const housingAllowance = parseFloat(updatePayrollForm['housingAllowance'])
   const transportAllowance = parseFloat(updatePayrollForm['transportAllowance'])
   const commission = parseFloat(updatePayrollForm['commission'])
@@ -39,13 +42,15 @@ const handleSubmit = async () => {
   axios.get(getPayrollsURL).then(response => {
     const jsonData = response.data
     let i = 0
-    let basePay: number
+    let found: boolean | undefined = false
+    // let basePay: number
 
     while (i < jsonData.length) {
       if (jsonData[i]['idNumber'] == idNumber) {
+        found = true
         // console.log(jsonData[i]['idNumber'])
         // nationalID = jsonData[i]['idNumber']
-        basePay = parseFloat(jsonData[i]['basePay'])
+        // basePay = parseFloat(jsonData[i]['basePay'])
         // trasportAllowance = parseFloat(jsonData[i]['transportAllowance'])
         // housingAllowance = parseFloat(jsonData[i]['housingAllowance'])
         // commission = parseFloat(jsonData[i]['commission'])
@@ -53,7 +58,7 @@ const handleSubmit = async () => {
       i++
     }
 
-    if (basePay != null) {
+    if (found == true) {
       // console.log(basePay)
       const grossPay = basePay + parseFloat(updatePayrollForm['housingAllowance']) + parseFloat(updatePayrollForm['housingAllowance']) + parseFloat(updatePayrollForm['commission'])
       const nssaPension = basePay * 0.045
@@ -104,24 +109,39 @@ const handleSubmit = async () => {
         netPayUSD: netPay
       }
 
+      const pobsContribution = 0.09 * basePay
+      const basicAPWCS = 0.0132 * basePay
+
+      employeeToUpdate = {
+        nationalID: idNumber,
+        pobsInsurableEarnings: basePay,
+        pobsContribution: pobsContribution,
+        basicAPWCS: basicAPWCS,
+        actualInsurableEarnings: basePay
+      }
+
+      console.log(payrollToUpdate)
+
       axios.put(putPayrollURL, payrollToUpdate).then(() => {
         toast.success('Payroll updated successfully!')
       }).catch(error => {
         toast.error('Something went wrong')
         console.log(error.response)
       })
+
+      axios.put(putEmployeeURL, employeeToUpdate).then(() => {
+        toast.success('Employee updated successfully!')
+        router.push('/')
+      }).catch(error => {
+        toast.error('Something went wrong')
+        console.log(error)
+      })
     } else {
       toast.warning('ID could not be found')
     }
 
 
-    // axios.put(putEmployeeURL, updatePayrollForm).then(() => {
-    //   toast.success('Updated successfully!')
-    //   router.push('/')
-    // }).catch(error => {
-    //   toast.error('Something went wrong')
-    //   console.log(error)
-    // })
+
   })
 }
 </script>
@@ -158,21 +178,22 @@ input[type=number] {
           <div class="mb-4 grid grid-cols-2 gap-2">
             <input type="text" v-model="updatePayrollForm.idNumber" id="idNumber" name="idNumber"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="ID Number" required>
-            <!-- <input type="number" v-model="updatePayrollForm.pobsInsurableEarnings" id="pobsInsurableEarnings"
-              name="pobsInsurableEarnings" class="border rounded w-full py-2 px-3 mb-2"
-              placeholder="POBS Insurable Earnings" required> -->
-            <input type="number" v-model="updatePayrollForm.housingAllowance" id="housingAllowance"
-              name="housingAllowance" class="border rounded w-full py-2 px-3 mb-2" placeholder="Housing Allowance"
-              required>
+            <input type="number" v-model="updatePayrollForm.basePay" id="basePay" name="basePay"
+              class="border rounded w-full py-2 px-3 mb-2" placeholder="Base Pay" required>
             <!-- <input type="text" v-model="updatePayrollForm.surname" id="surname" name="surname"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Surname" required> -->
           </div>
 
           <!-- 3rd row -->
           <div class="mb-4 grid grid-cols-2 gap-2">
+            <input type="number" v-model="updatePayrollForm.housingAllowance" id="housingAllowance"
+              name="housingAllowance" class="border rounded w-full py-2 px-3 mb-2" placeholder="Housing Allowance"
+              required>
             <input type="text" v-model="updatePayrollForm.transportAllowance" id="transportAllowance"
               name="transportAllowance" class="border rounded w-full py-2 px-3 mb-2" placeholder="Transport Allowance"
               required>
+          </div>
+          <div class="mb-4 grid grid-cols-2 gap-2">
             <input type="number" v-model="updatePayrollForm.commission" id="commission" name="commission"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Commission" required>
           </div>

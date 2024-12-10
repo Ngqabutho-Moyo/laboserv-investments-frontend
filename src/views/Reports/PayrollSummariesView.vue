@@ -68,33 +68,33 @@ export default {
         <tr>
           <td>Days 88 Basic USD</td>
           <td>{{ jsonData['entries'] }}</td>
-          <td>{{ jsonData['basePay'] }}</td>
+          <td style="text-align: right;">{{ jsonData['basePay'] }}</td>
           <td>P.A.Y.E. USD</td>
           <td>{{ jsonData['entries'] }}</td>
-          <td>{{ jsonData['payeUSD'] }}</td>
+          <td style="text-align: right;">{{ parseFloat(jsonData['payeUSD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Commission USD</td>
           <td>{{ jsonData['entries'] }}</td>
-          <td>&nbsp;&nbsp;{{ jsonData['commission'] }}</td>
+          <td style="text-align: right;">{{ jsonData['commission'] }}</td>
           <td>AIDS Levy USD</td>
           <td>{{ jsonData['entries'] }}</td>
-          <td>&nbsp;&nbsp;{{ jsonData['aidsLevyUSD'] }}</td>
+          <td style="text-align: right;">{{ parseFloat(jsonData['aidsLevyUSD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Housing Allowance USD</td>
           <td>{{ jsonData['entries'] }}</td>
-          <td>&nbsp;&nbsp;{{ jsonData['housingAllowance'] }}</td>
+          <td style="text-align: right;">{{ jsonData['housingAllowance'] }}</td>
           <td>NSSA USD</td>
           <td>{{ jsonData['entries'] }}</td>
-          <td>&nbsp;&nbsp;{{ jsonData['nssaLevyUSD'] }}</td>
+          <td style="text-align: right;">{{ parseFloat(jsonData['nssaLevyUSD']).toFixed(2) }}</td>
           <td>NSSA USD</td>
-          <td>{{ jsonData['nssaLevyUSD'] }}</td>
+          <td style="text-align: right;">{{ parseFloat(jsonData['nssaLevyUSD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Transport Allowance USD</td>
           <td>{{ jsonData['entries'] }}</td>
-          <td>&nbsp;&nbsp;{{ jsonData['transportAllowance'] }}</td>
+          <td style="text-align: right;">{{ jsonData['transportAllowance'] }}</td>
         </tr>
         <tr>
           <td></td>
@@ -104,7 +104,7 @@ export default {
           <td></td>
           <td></td>
           <td>WCIF USD</td>
-          <td>{{ jsonData['WCIF_USD'] }}</td>
+          <td style="text-align: right;">{{ parseFloat(jsonData['WCIF_USD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td></td>
@@ -114,7 +114,7 @@ export default {
           <td></td>
           <td></td>
           <td>Zimdef USD</td>
-          <td>{{ zimdefUSD }}</td>
+          <td style="text-align: right;">{{ zimdefUSD }}</td>
         </tr>
         <tr>
           <td></td>
@@ -124,7 +124,7 @@ export default {
           <td></td>
           <td></td>
           <td>Standards Dev Levy USD</td>
-          <td>{{ jsonData['standardsDevLevy'] }}</td>
+          <td style="text-align: right;">{{ parseFloat(jsonData['standardsDevLevy']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td></td>
@@ -134,29 +134,37 @@ export default {
           <td></td>
           <td></td>
           <td>Stabilization Fund USD</td>
-          <td>{{ stabilizationFundUSD }}</td>
+          <td style="text-align: right;">{{ parseFloat(stabilizationFundUSD).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Gross Pay USD</td>
           <td></td>
-          <td>{{ jsonData['grossPay'] }}</td>
+          <td style="text-align: right;">{{ jsonData['grossPay'] }}</td>
           <td>Total Deductions USD</td>
           <td></td>
-          <td>&nbsp;&nbsp;{{ jsonData['totalDeductionsUSD'] }}</td>
+          <td style="text-align: right;">{{ parseFloat(jsonData['totalDeductionsUSD']).toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Benefits USD 0.00</td>
           <td>Credits USD</td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.00</td>
+          <td style="text-align: right;">0.00</td>
           <td>Nett Pay USD</td>
           <td></td>
-          <td>{{ jsonData['netPayUSD'] }}</td>
+          <td style="text-align: right;">{{ parseFloat(jsonData['netPayUSD']).toFixed(2) }}</td>
           <td>Total Employer Contr. USD:</td>
-          <td>{{ parseFloat(jsonData['nssaLevyUSD']) + jsonData['WCIF_USD'] +
+          <td style="text-align: right;">{{ parseFloat(parseFloat(jsonData['nssaLevyUSD']) +
+            parseFloat(jsonData['WCIF_USD']) +
             zimdefUSD +
-            jsonData['standardsDevLevy'] + stabilizationFundUSD }}</td>
+            parseFloat(jsonData['standardsDevLevy']) + stabilizationFundUSD).toFixed(2) }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
+
+<style>
+th,
+td {
+  padding-right: 1.25%
+}
+</style>

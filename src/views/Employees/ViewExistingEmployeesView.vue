@@ -88,5 +88,14 @@ th,
 tbody,
 td {
   border: px solid black;
+  /* padding-right: 1.25%;
+  padding-left: 1.25%; */
 }
 </style>
+
+<!-- <style>
+th,
+td {
+  padding-right: 1.25%
+}
+</style> -->

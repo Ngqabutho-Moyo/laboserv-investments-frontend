@@ -4,9 +4,10 @@ import AuditTrailView from '@/views/AuditTrailView.vue'
 import HelpView from '@/views/HelpView.vue'
 import ProcessPayrollView from '@/views/ProcessPayrollView.vue'
 import TaxAndOtherTablesView from '@/views/TaxAndOtherTablesView.vue'
-import CreateNewPayrollView from '@/views/Payroll Files/CreateNewPayrollView.vue'
+import CreateNewPayrollView from '@/views/Payroll Files/CreateNewPayrollView1.vue'
 import CreateNewEmployeeView from '@/views/Employees/CreateNewEmployeeView.vue'
 import ViewExistingEmployeesView from '@/views/Employees/ViewExistingEmployeesView.vue'
+import DeleteEmployeeView from '@/views/Employees/DeleteEmployeeView.vue'
 import PayrollSummariesView from '@/views/Reports/PayrollSummariesView.vue'
 import TaxTablesView from '@/views/Tax and Other Tables/TaxTablesView.vue'
 import OpenExistingPayrollView from '@/views/Payroll Files/OpenExistingPayrollView.vue'
@@ -41,6 +42,11 @@ const router = createRouter({
       path: '/update-employee',
       name: 'update-employee',
       component: UpdateEmployeeView,
+    },
+    {
+      path: '/delete-employee',
+      name: 'delete-employee',
+      component: DeleteEmployeeView,
     },
     {
       path: '/open-existing-payroll',

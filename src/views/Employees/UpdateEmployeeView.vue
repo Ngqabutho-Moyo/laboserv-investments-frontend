@@ -15,85 +15,61 @@ defineProps({
 
 const toast = useToast()
 const putEmployeeURL = 'http://localhost:5000/api/employee/update'
-const getEmployeesURL = 'http://localhost:5000/api/employees'
+// const getEmployeesURL = 'http://localhost:5000/api/employees'
 const putPayrollURL = 'http://localhost:5000/api/payroll/update'
-const getPayrollURL = 'http://localhost:5000/api/payroll'
+// const getPayrollURL = 'http://localhost:5000/api/payroll'
 const getPayrollsURL = 'http://localhost:5000/api/payrolls'
 
 
 const updateEmployeeForm = reactive({
-  // ssrNumber: null,
-  // worksNumber: null,
-  // ssnNumber: null,
   nationalID: '',
-  // period: null,
-  // birthDate: null,
-  // surname: '',
-  // firstName: '',
-  // startDate: null,
-  // endDate: null,
-  // pobsInsurableEarnings: '',
-  // pobsContribution: null,
-  // basicAPWCS: null,
+  pobsInsurableEarnings: '',
   actualInsurableEarnings: '',
 })
 
-// let payrollToUpdate = {
-//   idNumber:'',
-//   basePay: '',
-//   housingAllowance: '',
-//   transportAllowance: '',
-//   commission: '',
-//   grossPay: '',
-//   payeUSD: '',
-//   aidsLevyUSD: '',
-//   nssaLevyUSD: '',
-//   totalDeductionsUSD: '',
-//   netPayUSD: ''
-// }
-
 let payrollToUpdate: object
-
-// const updatedPayrollForm = reactive({
-//   idNumber: '',
-//   basePay: '',
-//   housingAllowance:'',
-//   transportAllowance:'',
-//   commission:'',
-//   grossPay: '',
-//   payeUSD: '',
-//   aidsLevyUSD: '',
-//   nssaLevyUSD: '',
-//   totalDeductionsUSD: '',
-//   netPayUSD: ''
-
-// })
+let employeeToUpdate: object
 
 const handleSubmit = async () => {
   const nationalID = updateEmployeeForm['nationalID']
-  const actualInsurableEarnings = parseFloat(updateEmployeeForm['actualInsurableEarnings'])
+  const basePay = parseFloat(updateEmployeeForm['actualInsurableEarnings'])
+  const pobsContribution = 0.09 * basePay
+  const basicAPWCS = 0.0132 * basePay
+
+  employeeToUpdate = {
+    nationalID: nationalID,
+    pobsInsurableEarnings: basePay,
+    pobsContribution: pobsContribution,
+    basicAPWCS: basicAPWCS,
+    actualInsurableEarnings: basePay
+  }
+
+  axios.put(putEmployeeURL, employeeToUpdate).then(() => {
+    toast.success('Employee updated successfully!')
+    router.push('/')
+  }).catch(error => {
+    toast.error('Something went wrong')
+    console.log(error)
+  })
+
   axios.get(getPayrollsURL).then(response => {
     const jsonData = response.data
     let i = 0
-    let idNumber: string
-    let basePay: number
-    let trasportAllowance: number
-    let housingAllowance: number
-    let commission: number
+    let found: boolean | undefined = false
+    let transportAllowance: number | undefined = 0.0
+    let housingAllowance: number | undefined = 0.0
+    let commission: number | undefined = 0.0
 
     while (i < jsonData.length) {
       if (jsonData[i]['idNumber'] == nationalID) {
-        idNumber = jsonData[i]['idNumber']
-        basePay = actualInsurableEarnings
-        trasportAllowance = parseFloat(jsonData[i]['transportAllowance'])
+        found = true
+        transportAllowance = parseFloat(jsonData[i]['transportAllowance'])
         housingAllowance = parseFloat(jsonData[i]['housingAllowance'])
         commission = parseFloat(jsonData[i]['commission'])
       }
       i++
     }
-    const grossPay = basePay + trasportAllowance + housingAllowance + commission
-    // const grossPay = newLocal
-    // console.log(grossPay)
+    const grossPay = basePay + transportAllowance + housingAllowance + commission
     const nssaPension = basePay * 0.045
     const taxableIncome = grossPay - nssaPension
 
@@ -119,16 +95,15 @@ const handleSubmit = async () => {
         paye = taxableIncome * 0.4 - 335
         break
     }
-    // console.log(paye)
     const aidsLevy = paye * 0.03
     const totalDeductions = paye + aidsLevy + nssaPension
     const netPay = grossPay - totalDeductions
-    // console.log(netPay)
+
     payrollToUpdate = {
-      idNumber: idNumber,
+      idNumber: nationalID,
       basePay: basePay,
       housingAllowance: housingAllowance,
-      trasportAllowance: trasportAllowance,
+      trasportAllowance: transportAllowance,
       commission: commission,
       grossPay: grossPay,
       payeUSD: paye,
@@ -138,20 +113,21 @@ const handleSubmit = async () => {
       netPayUSD: netPay
     }
 
-    axios.put(putPayrollURL, payrollToUpdate).then(() => {
-      toast.success('Payroll updated successfully!')
-    }).catch(error => {
-      toast.error('Something went wrong')
-      console.log(error.response)
-    })
 
-    axios.put(putEmployeeURL, updateEmployeeForm).then(() => {
-      toast.success('Updated successfully!')
-      router.push('/')
-    }).catch(error => {
-      toast.error('Something went wrong')
-      console.log(error)
-    })
+    if (found == true) {
+      if (updateEmployeeForm['pobsInsurableEarnings'] == updateEmployeeForm['actualInsurableEarnings']) {
+        axios.put(putPayrollURL, payrollToUpdate).then(() => {
+          toast.success('Payroll updated successfully!')
+        }).catch(error => {
+          toast.error('Something went wrong')
+          console.log(error.response)
+        })
+      } else {
+        toast.warning('POBS insurable earnings and actual insurable earnings should be the same')
+      }
+    } else {
+      toast.info(`Employee with ID ${nationalID} does not have a payslip`)
+    }
   })
 }
 </script>
@@ -185,17 +161,15 @@ input[type=number] {
           <h2 class="text-3l text-center font-semibold mb-6">{{ title }}</h2>
 
           <!-- 2nd row -->
-          <div class="mb-4 grid grid-cols-2 gap-2">
+          <div class="mb-4 grid grid-cols-3 gap-3">
             <input type="text" v-model="updateEmployeeForm.nationalID" id="idNumber" name="idNumber"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="National ID" required>
-            <!-- <input type="number" v-model="updateEmployeeForm.pobsInsurableEarnings" id="pobsInsurableEarnings"
+            <input type="number" v-model="updateEmployeeForm.pobsInsurableEarnings" id="pobsInsurableEarnings"
               name="pobsInsurableEarnings" class="border rounded w-full py-2 px-3 mb-2"
-              placeholder="POBS Insurable Earnings" required> -->
+              placeholder="POBS Insurable Earnings" required>
             <input type="number" v-model="updateEmployeeForm.actualInsurableEarnings" id="actualInsurableEarnings"
               name="actualInsurableEarnings" class="border rounded w-full py-2 px-3 mb-2"
               placeholder="Actual Insurable Earnings" required>
-            <!-- <input type="text" v-model="updateEmployeeForm.surname" id="surname" name="surname"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Surname" required> -->
           </div>
 
           <!-- 3rd row -->

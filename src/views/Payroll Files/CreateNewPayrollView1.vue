@@ -15,7 +15,8 @@ defineProps({
 const toast = useToast()
 const createPayrollURL = 'http://localhost:5000/api/payrolls/create'
 const getEmployeesURL = 'http://localhost:5000/api/employees'
-const getPayrollsURL = 'http://localhost:5000/api/payrolls/'
+const getPayrollsURL = 'http://localhost:5000/api/payrolls'
+// const getPayrollURL = 'http://localhost:5000/api/payroll'
 
 const form = reactive({
   firstName: null,
@@ -45,90 +46,110 @@ const handleSubmit = async () => {
    * 1. Does the employee exist in the employees table?
    * 2. Has the payroll already been created?
    */
+  // console.log(form['idNumber'])
 
-  const idNumber = form['idNumber']
-  // let validators = {}
-
-  axios.get(getEmployeesURL).then(response => {
+  axios.get(getPayrollsURL).then(response => {
     const jsonData = response.data
-    let nationalID: string
-    let ssnNumber: string
-    let basePay: number
     let i = 0
+    let found: boolean | undefined = false
 
     while (i < jsonData.length) {
-      if (jsonData[i]['nationalID'] == idNumber) {
-        nationalID = jsonData[i]['nationalID']
-        ssnNumber = jsonData[i]['ssnNumber']
-        basePay = parseFloat(jsonData[i]['actualInsurableEarnings'])
+      if (jsonData[i]['idNumber'] == form['idNumber']) {
+        found = true
       }
       i++
     }
 
-    // validators = {
-    //   nationalID: nationalID,
-    //   ssnNumber: ssnNumber,
-    //   basePay: basePay
-    // }
-
-    if (nationalID != null) {
-      // if (ssnNumber != form['nssaNumber']) {
-      if (form['basePay'] == basePay) {
-        // console.log('Pass')
-        axios.post(createPayrollURL, form).then((response) => {
-          console.log(response)
-          toast.success('Payroll was added successfully!')
-          router.push('/')
-        }).catch((error) => {
-          console.log(error)
-          toast.error('Something went wrong')
-        })
-      } else {
-        toast.warning(`Base pay does not match insurable earnings of ${basePay}`)
-      }
-      // } else {
-      //   toast.warning(`Employee with NSSA number ${ssnNumber} already has a payroll. Perhaps you want to update?`)
-      // }
+    if (found == true) {
+      toast.warning(`${form['firstName']} ${form['surname']} is already on payroll`)
+      return
     } else {
-      toast.warning(`Employee with id ${idNumber} does not exist`)
+      // toast.warning(`${form['firstName']} ${form['surname']} is not yet on payroll`)
+      axios.get(getEmployeesURL).then(response => {
+        const jsonData = response.data
+        let i = 0
+        let firstName: string | undefined = ''
+        let surname: string | undefined = ''
+        let nssaNumber: string | undefined = ''
+        let dateJoined: string | undefined = ''
+        let basePay: string | undefined = ''
+        let found: boolean | undefined = false
+
+        while (i < jsonData.length) {
+          if (jsonData[i]['nationalID'] == form['idNumber']) {
+            found = true
+            firstName = jsonData[i]['firstName']
+            surname = jsonData[i]['surname']
+            nssaNumber = jsonData[i]['ssnNumber']
+            dateJoined = jsonData[i]['startDate']
+            basePay = jsonData[i]['pobsInsurableEarnings']
+          }
+          i++
+        }
+        if (found == true) {
+          if (form['firstName'] == firstName && form['surname'] == surname && form['nssaNumber'] == nssaNumber && form['dateJoined'] == dateJoined && form['basePay'] == basePay) {
+            axios.post(createPayrollURL, form).then(() => {
+              toast.success('Payroll added successfully!')
+              router.push('/')
+            }).catch(error => {
+              toast.error('Something went wrong')
+              console.log(error.response)
+            })
+          } else {
+            toast.warning('First name, last name, NSSA number, date joined or base pay do not match what is in the employees table')
+          }
+        } else {
+          toast.warning(`Employee with ID ${form['idNumber']} is not in the employees table`)
+        }
+
+      }).catch(error => {
+        console.log(error.response)
+      })
+      // const validators = {}
+
+
+
+      // axios.get(getPayrollsURL).then(response => {
+      //   const jsonData = response.data
+      //   let idNumber: string
+      //   let basePay: number
+      //   let i = 0
+
+      //   while (i < jsonData.length) {
+      //     if (jsonData[i]['nationalID'] == form['idNumber']) {
+      //       idNumber = jsonData[i]['idNumber']
+      //       basePay = parseFloat(jsonData[i]['basePay'])
+      //       i++
+      //     }
+      //   }
+
+      //   // const dataToValidate=validators
+
+      //   // Validate employee
+      //   if (validators['nationalID'] == form['idNumber']) {
+      //     console.log('Employee exists')
+
+      //     // Validate payslip
+      //     // if (idNumber == form['idNumber']) {
+      //     //   console.log('Employee does not have a payroll yet')
+      //     // } else {
+      //     //   console.log('Employee already has a payroll')
+      //     // }
+      //   } else {
+      //     console.log('Employee does not exist')
+      //   }
+
+      // }).catch(error => {
+      //   console.log(error)
+      // })
     }
   }).catch(error => {
-    console.log(error)
+    console.log(error.respone)
   })
 
-  // axios.get(getPayrollsURL).then(response => {
-  //   const jsonData = response.data
-  //   let idNumber: string
-  //   let basePay: number
-  //   let i = 0
 
-  //   while (i < jsonData.length) {
-  //     if (jsonData[i]['nationalID'] == form['idNumber']) {
-  //       idNumber = jsonData[i]['idNumber']
-  //       basePay = parseFloat(jsonData[i]['basePay'])
-  //       i++
-  //     }
-  //   }
 
-  //   // const dataToValidate=validators
 
-  //   // Validate employee
-  //   if (validators['nationalID'] == form['idNumber']) {
-  //     console.log('Employee exists')
-
-  //     // Validate payslip
-  //     // if (idNumber == form['idNumber']) {
-  //     //   console.log('Employee does not have a payroll yet')
-  //     // } else {
-  //     //   console.log('Employee already has a payroll')
-  //     // }
-  //   } else {
-  //     console.log('Employee does not exist')
-  //   }
-
-  // }).catch(error => {
-  //   console.log(error)
-  // })
 
 }
 </script>
@@ -223,8 +244,8 @@ input[type=number] {
             <input type="text" v-model="form.accountNumber" id="accountNumber" name="accountNumber"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Account number" required>
           </div>
-          <div class="mb-4 grid grid-cols-2 gap-2">
 
+          <div class="mb-4 grid grid-cols-2 gap-2">
             <input type="number" v-model="form.basePay" id="basePay" name="basePay"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Base pay" required>
             <input type="number" v-model="form.housingAllowance" id="housingAllowance" name="housingAllowance"
