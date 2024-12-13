@@ -8,9 +8,9 @@ import Hero from '@/components/Hero.vue';
     <Navbar></Navbar>
   </div>
   <div>
-    <Hero title="Home"></Hero>
+    <Hero title="Laboserv Investments Payroll"></Hero>
     <section class="bg-center bg-no-repeat h-screen bg-contain "
-      style="background-image: url('src/assets/img/laboserv3.png');">
+      style="background-image: url('src/assets/img/laboserv4.png');">
     </section>
   </div>
 </template>

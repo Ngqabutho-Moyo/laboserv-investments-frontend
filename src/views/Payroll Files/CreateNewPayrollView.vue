@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar.vue';
 import { reactive } from 'vue';
 import axios from 'axios';
 import { useToast } from 'vue-toastification'
-import router from '@/router';
+// import router from '@/router';
 
 defineProps({
   title: {
@@ -14,8 +14,9 @@ defineProps({
 
 const toast = useToast()
 const createPayrollURL = 'http://localhost:5000/api/payrolls/create'
-const getEmployeesURL = 'http://localhost:5000/api/employees'
-const getPayrollsURL = 'http://localhost:5000/api/payrolls/'
+// const getEmployeesURL = 'http://localhost:5000/api/employees'
+const getEmployeeURL = 'http://localhost:5000/api/employee'
+// const getPayrollsURL = 'http://localhost:5000/api/payrolls/'
 
 const form = reactive({
   firstName: null,
@@ -45,56 +46,82 @@ const handleSubmit = async () => {
    * 1. Does the employee exist in the employees table?
    * 2. Has the payroll already been created?
    */
-
-  const idNumber = form['idNumber']
-  // let validators = {}
-
-  axios.get(getEmployeesURL).then(response => {
-    const jsonData = response.data
-    let nationalID: string
-    let ssnNumber: string
-    let basePay: number
-    let i = 0
-
-    while (i < jsonData.length) {
-      if (jsonData[i]['nationalID'] == idNumber) {
-        nationalID = jsonData[i]['nationalID']
-        ssnNumber = jsonData[i]['ssnNumber']
-        basePay = parseFloat(jsonData[i]['actualInsurableEarnings'])
-      }
-      i++
+  const getEmployeeConfig = {
+    params: {
+      firstName: form['firstName'],
+      surname: form['surname']
     }
+  }
 
-    // validators = {
-    //   nationalID: nationalID,
-    //   ssnNumber: ssnNumber,
-    //   basePay: basePay
-    // }
-
-    if (nationalID != null) {
-      // if (ssnNumber != form['nssaNumber']) {
-      if (form['basePay'] == basePay) {
-        // console.log('Pass')
-        axios.post(createPayrollURL, form).then((response) => {
+  axios.get(getEmployeeURL, getEmployeeConfig).then(response => {
+    const jsonData = response.data
+    if (jsonData > 0) {
+      if (jsonData['pobsInsurableEarnings'] == form['basePay']) {
+        console.log('Create')
+        axios.post(createPayrollURL, form).then(response => {
           console.log(response)
-          toast.success('Payroll was added successfully!')
-          router.push('/')
-        }).catch((error) => {
-          console.log(error)
-          toast.error('Something went wrong')
+          toast.success('Payroll created successfully')
+        }).catch(error => {
+          toast.error('Failed to create payroll')
+          console.log(error.response.data)
         })
-      } else {
-        toast.warning(`Base pay does not match insurable earnings of ${basePay}`)
       }
-      // } else {
-      //   toast.warning(`Employee with NSSA number ${ssnNumber} already has a payroll. Perhaps you want to update?`)
-      // }
     } else {
-      toast.warning(`Employee with id ${idNumber} does not exist`)
+      toast.warning('Employee could not be found')
     }
   }).catch(error => {
-    console.log(error)
+    toast.error('Failed to get employee')
+    console.log(error.response.data)
   })
+
+  // let validators = {}
+
+  // axios.get(getEmployeesURL).then(response => {
+  //   const jsonData = response.data
+  //   let nationalID: string
+  //   let ssnNumber: string
+  //   let basePay: number
+  //   let i = 0
+
+  //   while (i < jsonData.length) {
+  //     if (jsonData[i]['nationalID'] == idNumber) {
+  //       nationalID = jsonData[i]['nationalID']
+  //       ssnNumber = jsonData[i]['ssnNumber']
+  //       basePay = parseFloat(jsonData[i]['actualInsurableEarnings'])
+  //     }
+  //     i++
+  //   }
+
+  //   // validators = {
+  //   //   nationalID: nationalID,
+  //   //   ssnNumber: ssnNumber,
+  //   //   basePay: basePay
+  //   // }
+
+  //   if (nationalID != null) {
+  //     // if (ssnNumber != form['nssaNumber']) {
+  //     if (form['basePay'] == basePay) {
+  //       // console.log('Pass')
+  //       axios.post(createPayrollURL, form).then((response) => {
+  //         console.log(response)
+  //         toast.success('Payroll was added successfully!')
+  //         router.push('/')
+  //       }).catch((error) => {
+  //         console.log(error)
+  //         toast.error('Something went wrong')
+  //       })
+  //     } else {
+  //       toast.warning(`Base pay does not match insurable earnings of ${basePay}`)
+  //     }
+  //     // } else {
+  //     //   toast.warning(`Employee with NSSA number ${ssnNumber} already has a payroll. Perhaps you want to update?`)
+  //     // }
+  //   } else {
+  //     toast.warning(`Employee with id ${idNumber} does not exist`)
+  //   }
+  // }).catch(error => {
+  //   console.log(error)
+  // })
 
   // axios.get(getPayrollsURL).then(response => {
   //   const jsonData = response.data

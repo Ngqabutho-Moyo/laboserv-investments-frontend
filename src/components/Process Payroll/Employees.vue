@@ -1,20 +1,15 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts">
-import Navbar from '@/components/Navbar.vue';
-import Hero from '@/components/Hero.vue';
 import axios from 'axios';
-
 
 export default {
   components: {
-    Navbar,
-    Hero
   },
 
   data() {
     return {
       jsonData: {},
       deductions: {},
-      getEmployeeURL: 'http://localhost:5000/api/payroll/',
       getEmployeesURL: 'http://localhost:5000/api/employees/',
       getDeductionsURL: 'http://localhost:5000/api/employees/deductions'
     }
@@ -37,13 +32,7 @@ export default {
 </script>
 
 <template>
-  <div class="mb-10">
-    <Navbar></Navbar>
-  </div>
-  <div class="mb-10">
-    <Hero title="Employees"></Hero>
-  </div>
-  <table class="mt-25">
+  <table class="mb-10">
     <thead>
       <tr>
         <th>SSRNumber</th>
@@ -64,20 +53,20 @@ export default {
     </thead>
     <tbody>
       <tr v-for="data in jsonData" :key="data">
-        <td>{{ data['ssrNumber'] }}</td>
-        <td>{{ data['worksNumber'] }}</td>
-        <td>{{ data['ssnNumber'] }}</td>
-        <td>{{ data['nationalID'] }}</td>
-        <td>{{ data['period'] }}</td>
-        <td>{{ data['birthDate'] }}</td>
-        <td>{{ data['surname'] }}</td>
-        <td>{{ data['firstName'] }}</td>
-        <td>{{ data['startDate'] }}</td>
-        <td>{{ data['endDate'] }}</td>
-        <td>{{ data['pobsInsurableEarnings'] }}</td>
-        <td>{{ data['pobsContribution'] }}</td>
-        <td>{{ data['basicAPWCS'] }}</td>
-        <td>{{ data['actualInsurableEarnings'] }}</td>
+        <td>{{ data['ssrNumber' as keyof typeof data] }}</td>
+        <td>{{ data['worksNumber' as keyof typeof data] }}</td>
+        <td>{{ data['ssnNumber' as keyof typeof data] }}</td>
+        <td>{{ data['nationalID' as keyof typeof data] }}</td>
+        <td>{{ data['period' as keyof typeof data] }}</td>
+        <td>{{ data['birthDate' as keyof typeof data] }}</td>
+        <td>{{ data['surname' as keyof typeof data] }}</td>
+        <td>{{ data['firstName' as keyof typeof data] }}</td>
+        <td>{{ data['startDate' as keyof typeof data] }}</td>
+        <td>{{ data['endDate' as keyof typeof data] }}</td>
+        <td>{{ data['pobsInsurableEarnings' as keyof typeof data] }}</td>
+        <td>{{ data['pobsContribution' as keyof typeof data] }}</td>
+        <td>{{ data['basicAPWCS' as keyof typeof data] }}</td>
+        <td>{{ data['actualInsurableEarnings' as keyof typeof data] }}</td>
       </tr>
       <tr>
         <td>&emsp13;</td>

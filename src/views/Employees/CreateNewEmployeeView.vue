@@ -32,13 +32,20 @@ const form = reactive({
 })
 
 const handleSubmit = async () => {
-  axios.post(postEmployeeURL, form).then(() => {
-    toast.success('Employee added successfully!')
-    router.push('/')
-  }).catch((error) => {
-    toast.error('Something went wrong')
-    console.log(error.response)
-  })
+  // Do the insurable arnings match?
+  if (form['pobsInsurableEarnings'] == form['actualInsurableEarnings']) {
+
+    // Create the employee
+    axios.post(postEmployeeURL, form).then(() => {
+      toast.success('Employee created successfully!')
+      router.push('/')
+    }).catch((error) => {
+      toast.error('Failed to create employee')
+      console.log(error.response.data)
+    })
+  } else {
+    toast.warning('Insurable earnings do not match')
+  }
 }
 </script>
 

@@ -37,10 +37,10 @@ export default {
           title: 'Create New Payroll',
           link: 'create-new-payroll',
         },
-        {
-          title: 'Update Existing Payroll',
-          link: 'update-payroll',
-        },
+        // {
+        //   title: 'Update Existing Payroll',
+        //   link: 'update-payroll',
+        // },
         {
           title: 'Create Backup Files',
           link: '#',
@@ -50,7 +50,11 @@ export default {
           link: '#',
         },
         {
-          title: 'Open Existing Payroll',
+          title: 'Open Payroll For This Month',
+          link: 'open-monthly-payroll',
+        },
+        {
+          title: 'Open Entire Payroll',
           link: 'open-existing-payroll',
         },
       ],
@@ -108,8 +112,12 @@ export default {
           link: '#'
         },
         {
-          title: 'Payroll Summaries',
-          link: 'payroll-summaries'
+          title: 'Payroll Summary',
+          link: 'payroll-summary'
+        },
+        {
+          title: 'Payroll Summary for Last Month',
+          link: 'monthly-payroll-summary'
         },
         {
           title: 'Non-categorized Period Summaries',

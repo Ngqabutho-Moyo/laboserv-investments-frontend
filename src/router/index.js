@@ -8,9 +8,11 @@ import CreateNewPayrollView from '@/views/Payroll Files/CreateNewPayrollView1.vu
 import CreateNewEmployeeView from '@/views/Employees/CreateNewEmployeeView.vue'
 import ViewExistingEmployeesView from '@/views/Employees/ViewExistingEmployeesView.vue'
 import DeleteEmployeeView from '@/views/Employees/DeleteEmployeeView.vue'
-import PayrollSummariesView from '@/views/Reports/PayrollSummariesView.vue'
+import PayrollSummaryView from '@/views/Reports/PayrollSummaryView.vue'
+import MonthlyPayrollSummary from '@/views/Reports/MonthlyPayrollSummary.vue'
 import TaxTablesView from '@/views/Tax and Other Tables/TaxTablesView.vue'
 import OpenExistingPayrollView from '@/views/Payroll Files/OpenExistingPayrollView.vue'
+import OpenMonthlyPayroll from '@/views/Payroll Files/OpenMonthlyPayroll.vue'
 import UpdateEmployeeView from '@/views/Employees/UpdateEmployeeView.vue'
 import UpdatePayrollView from '@/views/Payroll Files/UpdatePayrollView.vue'
 
@@ -22,11 +24,15 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
-
     {
-      path: '/payroll-summaries',
-      name: 'payroll-summmaries',
-      component: PayrollSummariesView,
+      path: '/payroll-summary',
+      name: 'payroll-summary',
+      component: PayrollSummaryView,
+    },
+    {
+      path: '/monthly-payroll-summary',
+      name: 'monthly-payroll-summary',
+      component: MonthlyPayrollSummary,
     },
     {
       path: '/create-employee',
@@ -52,6 +58,11 @@ const router = createRouter({
       path: '/open-existing-payroll',
       name: 'open-existing-payroll',
       component: OpenExistingPayrollView,
+    },
+    {
+      path: '/open-monthly-payroll',
+      name: 'open-monthly-payroll',
+      component: OpenMonthlyPayroll,
     },
     {
       path: '/update-payroll',

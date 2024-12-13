@@ -15,9 +15,9 @@ defineProps({
 
 const toast = useToast()
 const putEmployeeURL = 'http://localhost:5000/api/employee/update'
-const getEmployeesURL = 'http://localhost:5000/api/employees'
+// const getEmployeesURL = 'http://localhost:5000/api/employees'
 const putPayrollURL = 'http://localhost:5000/api/payroll/update'
-const getPayrollURL = 'http://localhost:5000/api/payroll'
+// const getPayrollURL = 'http://localhost:5000/api/payroll'
 const getPayrollsURL = 'http://localhost:5000/api/payrolls'
 
 
