@@ -1,5 +1,6 @@
 <script lang="ts">
 import axios from 'axios';
+import moment from 'moment'
 // import { onMounted } from 'vue';
 
 export default {
@@ -14,21 +15,32 @@ export default {
       zimdefUSD: 30.01,
       standardsDevLevyUSD: 0.0,
       stabilizationFundUSD: 0.00,
-      totalEmployerContrUSD: 0.00
+      totalEmployerContrUSD: 0.00,
+      firstDayOfMonth: '',
+      lastDayOfMonth: ''
     }
   },
 
   mounted() {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     const date = new Date()
+    // const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+    const lastDayOfMonth = moment().endOf('month').format('DD')
+    const firstDayOfMonth = moment().startOf('month').format('D')
 
-    if (months[date.getMonth()] == 'January') {
-      this.month = 'December'
-      this.year = (date.getFullYear()) - 1
-    } else {
-      this.month = months[date.getMonth() - 1]
-      this.year = date.getFullYear()
-    }
+    // if (months[date.getMonth()] == 'January') {
+    //   this.month = 'December'
+    //   this.year = (date.getFullYear()) - 1
+    // } else {
+    //   this.month = months[date.getMonth() - 1]
+    //   this.year = date.getFullYear()
+    // }
+    this.month = months[date.getMonth()]
+    this.firstDayOfMonth = firstDayOfMonth
+    this.lastDayOfMonth = lastDayOfMonth.toString()
+    this.year = date.getFullYear()
+    // this.lastDayOfMonth = lastDayOfMonth.toString()
+
     // let found: boolean | undefined = false
 
     const payrollParams = {
@@ -58,11 +70,12 @@ export default {
 </script>
 
 <template>
-  <div class="grid grid-cols-3 gap-3 py-12">
+  <div class="grid grid-cols-2 gap-2 py-12">
     <img v-bind:src="'/src/assets/img/laboserv4.png'">
     <div>
       <p><strong>Laboserv Investments P/L</strong></p>
-      <p><strong>PAYROLL SUMMARY FOR {{ month.toUpperCase() }} {{ year }}</strong></p>
+      <p><strong>PAYROLL SUMMARY FOR PERIOD FROM {{ firstDayOfMonth }} {{ month.toUpperCase() }} {{ year }} TO {{
+        lastDayOfMonth }} {{ month.toUpperCase() }} {{ year }}</strong></p>
       <p>Averaged for period: IBR=25.59, NSSA Ceiling=17,912.51</p>
     </div>
     <!-- <img v-bind:src="'/src/assets/logos/NQ labs.png'" style="width: 50px; height: 50px;"> -->
@@ -159,7 +172,7 @@ export default {
           <td></td>
           <td></td>
           <td>Stabilization Fund USD</td>
-          <td style="text-align: right;">{{ stabilizationFundUSD }}</td>
+          <td style="text-align: right;">{{ (stabilizationFundUSD.toFixed(2)) }}</td>
         </tr>
         <tr>
           <td>Gross Pay USD</td>

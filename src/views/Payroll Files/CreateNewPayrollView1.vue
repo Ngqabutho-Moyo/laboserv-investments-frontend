@@ -14,9 +14,7 @@ defineProps({
 
 const toast = useToast()
 const createPayrollURL = 'http://localhost:5000/api/payrolls/create'
-// const getEmployeesURL = 'http://localhost:5000/api/employees'
 const getEmployeeURL = 'http://localhost:5000/api/employee'
-// const getPayrollsURL = 'http://localhost:5000/api/payrolls'
 const getPayrollURL = 'http://localhost:5000/api/payroll'
 
 const form = reactive({
@@ -51,13 +49,16 @@ const handleSubmit = async () => {
    */
   const getEmployeeParams = {
     params: {
-      nationalID: form['idNumber']
+      firstName: form['firstName'],
+      surname: form['surname']
     }
   }
 
   const getPayrollParams = {
     params: {
       idNumber: form['idNumber'],
+      firstName: form['firstName'],
+      surname: form['surname'],
       month: form['month'],
       year: form['year']
 
@@ -69,32 +70,40 @@ const handleSubmit = async () => {
     const jsonData = response.data
     console.log(jsonData)
     if (!jsonData) {
-      console.log('Create the payslip')
-
       // Does the employee exist in the employees table?
       axios.get(getEmployeeURL, getEmployeeParams).then(response => {
         const jsonData = response.data
-        if (jsonData) {
-
-          // Do the payslip details match those in the employee table?
-          if (form['NSSANumber'] == jsonData['ssnNumber'] && form['dateJoined'] == jsonData['startDate'] && form['basePay'] == jsonData['pobsInsurableEarnings']) {
-
-            // Create the payslip
-            axios.post(createPayrollURL, form).then(() => {
-              toast.success('Payslip created successfully!')
-              router.push('/')
-            }).catch(error => {
-              toast.error('Failed to create the payslip')
-              console.log(error.response.data)
-            })
-          } else {
-            toast.warning('One of NSSA number, date joined, start date or base pay does not match what is in the employee table')
+        if (response.status == 200) {
+          if (form['idNumber'] == jsonData['nationalID']) {
+            if (form['firstName'] == jsonData['firstName'] && form['surname'] == jsonData['surname']) {
+              // Do the payslip details match those in the employee table?
+              if (form['NSSANumber'] == jsonData['ssnNumber'] && form['dateJoined'] == jsonData['startDate'] && form['basePay'] == jsonData['pobsInsurableEarnings']) {
+                // Create the payslip
+                axios.post(createPayrollURL, form).then(() => {
+                  toast.success('Payslip created successfully!')
+                  router.push('/')
+                }).catch(error => {
+                  toast.error('Failed to create the payslip')
+                  console.log(error.response.data)
+                })
+              } else {
+                toast.warning('One of NSSA number, date joined or base pay does not match what is in the employee table')
+              }
+            } else {
+              toast.warning(`${form['firstName']} ${form['surname']} does not exist in the employee table`)
+            }
           }
-        } else {
-          toast.error(`Employee with ID ${form['idNumber']} does not exist in the employee table`)
+          else {
+            toast.warning(`Employee with ID ${form['idNumber']} does not exist`)
+          }
+        }
+        else {
+          toast.error(`${form['firstName']} ${form['surname']} does not exist in the employees table`)
         }
       }).catch(error => {
-        toast.error('Failed to fetch employee data')
+        if (error.response.status == 404) {
+          toast.warning(`${form['firstName']} ${form['surname']} does not exist in the employees table`)
+        }
         console.log(error.response.data)
       })
     }
@@ -104,6 +113,8 @@ const handleSubmit = async () => {
   }).catch(error => {
     if (error.response.status == 404) {
       console.log('Create the payslip')
+    } else {
+      console.log(error.response.data)
     }
   })
 }

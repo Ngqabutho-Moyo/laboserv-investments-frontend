@@ -140,6 +140,7 @@ export default {
     <hr>
     <hr>
     <hr>
+    <div style="break-after:page"></div>
   </div>
 </template>
 

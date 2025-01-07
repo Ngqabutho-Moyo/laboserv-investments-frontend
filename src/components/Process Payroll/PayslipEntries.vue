@@ -6,22 +6,32 @@ export default {
     return {
       found: false,
       month: '',
-      year: '',
+      year: 0,
       jsonData: {},
       url: 'http://localhost:5000/api/payrolls/period',
     }
   },
   mounted() {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     const date = new Date()
+
+    // if (months[date.getMonth()] == 'January') {
+    //   this.month = 'December'
+    //   this.year = (date.getFullYear()) - 1
+    // } else {
+    //   this.month = months[date.getMonth() - 1]
+    //   this.year = date.getFullYear()
+    // }
+
+    this.month = months[date.getMonth()]
+    this.year = date.getFullYear()
+
     const payrollParams = {
       params: {
-        month: date.toLocaleString('en-us', { month: 'long' }),
-        year: date.getFullYear()
+        month: this.month,
+        year: this.year
       }
     }
-
-    this.month = date.toLocaleString('en-us', { month: 'long' })
-    this.year = date.getFullYear().toString()
 
     axios.get(this.url, payrollParams).then((response => {
       if (response.status != 404) {
@@ -39,11 +49,15 @@ export default {
 <template>
   <div class="mb-10" style="align-self: flex-end;">
     <!-- <img v-bind:src="'/src/assets/img/laboserv4.png'"> -->
-    <div>
-      <p><strong>Laboserv Investments P/L</strong></p>
-      <p><strong>MONTHLY PAYROLL FOR {{ month.toUpperCase() }} {{ year }}</strong></p>
-      <p>Averaged for period: IBR=25.59, NSSA Ceiling=17,912.51</p>
-    </div>
+    <!-- <div class="grid grid-cols-3 gap-3">
+      <div></div>
+      <div>
+        <p><strong>Laboserv Investments P/L</strong></p>
+        <p><strong>MONTHLY PAYROLL FOR {{ month.toUpperCase() }} {{ year }}</strong></p>
+        <p>Averaged for period: IBR=25.59, NSSA Ceiling=17,912.51</p>
+      </div>
+      <div></div>
+    </div> -->
     <!-- <img v-bind:src="'/src/assets/logos/NQ labs.png'" style="width: 50px; height: 50px;"> -->
   </div>
   <div v-if="found == false">

@@ -20,7 +20,7 @@ import PayslipEntries from '@/components/Process Payroll/PayslipEntries.vue';
       <div class="grid grid-cols-4 gap-4">
         <p><strong>Initiated by</strong></p>
         <p>................................................</p>
-        <p><strong>Confirmed by Pri</strong></p>
+        <p><strong>Confirmed by Pride Maguta</strong></p>
         <p>...............................................</p>
       </div>
       <div class="grid grid-cols-4 gap-4">

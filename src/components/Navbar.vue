@@ -50,7 +50,7 @@ export default {
           link: '#',
         },
         {
-          title: 'Open Payroll For This Month',
+          title: 'Open Payroll For Last Month',
           link: 'open-monthly-payroll',
         },
         {

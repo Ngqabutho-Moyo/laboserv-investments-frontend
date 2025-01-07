@@ -15,7 +15,6 @@ defineProps({
 
 const toast = useToast()
 const putEmployeeURL = 'http://localhost:5000/api/employee/update'
-const getEmployeeURL = 'http://localhost:5000/api/employee'
 
 
 const updateEmployeeForm = reactive({
@@ -26,7 +25,6 @@ const updateEmployeeForm = reactive({
 })
 
 let employeeToUpdate: object
-let nationalID: string
 
 const handleSubmit = async () => {
   const basePay = parseFloat(updateEmployeeForm['actualInsurableEarnings'])
@@ -42,32 +40,21 @@ const handleSubmit = async () => {
     actualInsurableEarnings: basePay
   }
 
-  const getEmployeeParams = {
-    params: {
-      // nationalID: 'id1',
-      firstName: updateEmployeeForm['firstName'],
-      surname: updateEmployeeForm['surname']
-    }
+  if (updateEmployeeForm['pobsInsurableEarnings'] == updateEmployeeForm['actualInsurableEarnings']) {
+    axios.put(putEmployeeURL, employeeToUpdate).then(() => {
+      toast.success('Employee updated successfully!')
+      router.push('/')
+    }).catch(error => {
+      if (error.response.status == 404) {
+        toast.warning(`${updateEmployeeForm['firstName']} ${updateEmployeeForm['surname']} does not exist in the employees table`)
+      } else {
+        toast.error('Failed to update employee')
+        console.log(error.response.data)
+      }
+    })
+  } else {
+    toast.warning('Earnings do not match')
   }
-
-  // Get ID of employee
-  // axios.get(getEmployeeURL, getEmployeeParams).then(response => {
-  //   const jsonData = response.data
-  //   console.log(jsonData)
-  //   nationalID = jsonData['nationalID']
-  //   console.log(nationalID)
-  // }).catch(error => {
-  //   console.log(error.response.data)
-  // })
-
-
-  axios.put(putEmployeeURL, employeeToUpdate).then(() => {
-    toast.success('Employee updated successfully!')
-    router.push('/')
-  }).catch(error => {
-    toast.error('Failed to update employee')
-    console.log(error.response.data)
-  })
 }
 </script>
 

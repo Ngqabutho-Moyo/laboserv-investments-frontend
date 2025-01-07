@@ -45,7 +45,7 @@ export default {
     <img v-bind:src="'/src/assets/img/laboserv4.png'">
     <div>
       <p><strong>Laboserv Investments P/L</strong></p>
-      <p><strong>PAYROLL SUMMARY FOR PERIOD SINCE JANUARY 2024</strong></p>
+      <p><strong>PAYROLL SUMMARY SINCE JANUARY 2024</strong></p>
       <p>Averaged for period: IBR=25.59, NSSA Ceiling=17,912.51</p>
     </div>
     <!-- <img v-bind:src="'/src/assets/logos/NQ labs.png'" style="width: 50px; height: 50px;"> -->

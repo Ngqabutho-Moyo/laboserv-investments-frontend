@@ -17,7 +17,7 @@ export default {
       found: false,
       url: 'http://localhost:5000/api/payrolls/summary/month',
       wcifUSD: 0.0,
-      zimdefUSD: 30.01,
+      // zimdefUSD: 30.01,
       standardsDevLevyUSD: 0.0,
       stabilizationFundUSD: 0.00,
       totalEmployerContrUSD: 0.00
@@ -173,7 +173,7 @@ export default {
           <td></td>
           <td></td>
           <td>Stabilization Fund USD</td>
-          <td style="text-align: right;">{{ stabilizationFundUSD }}</td>
+          <td style="text-align: right;">{{ stabilizationFundUSD.toFixed(2) }}</td>
         </tr>
         <tr>
           <td>Gross Pay USD</td>
