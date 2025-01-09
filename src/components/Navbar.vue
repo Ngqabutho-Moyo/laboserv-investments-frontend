@@ -1,5 +1,6 @@
 <script lang="ts">
 import Dropdown from './Dropdown.vue';
+// import Dropdown from './Dropdown.vue';
 import { RouterLink } from 'vue-router';
 // import logo from '@/assets/img/laboserv2.png';
 
@@ -12,6 +13,16 @@ export default {
   },
   data: () => {
     return {
+      payslipEntries: [
+        {
+          title: 'For Last Month',
+          link: 'open-monthly-payslips'
+        },
+        {
+          title: 'Since January 2024',
+          link: 'open-existing-payslips'
+        }
+      ],
       payrollFiles: [
         {
           title: 'Pay Calendar',
@@ -34,7 +45,7 @@ export default {
           link: '#',
         },
         {
-          title: 'Create New Payroll',
+          title: 'Create New Payslip',
           link: 'create-new-payroll',
         },
         // {
@@ -50,11 +61,11 @@ export default {
           link: '#',
         },
         {
-          title: 'Open Payroll For Last Month',
+          title: 'Open Payslips For Last Month',
           link: 'open-monthly-payroll',
         },
         {
-          title: 'Open Entire Payroll',
+          title: 'Open All Payslips',
           link: 'open-existing-payroll',
         },
       ],
@@ -145,9 +156,10 @@ export default {
     </div>
     <Dropdown title="Payroll Files" :items="payrollFiles"></Dropdown>
     <Dropdown title="Employees" :items="employees"></Dropdown>
-    <div class="menu-item">
+    <!-- <div class="menu-item">
       <RouterLink to="#">Payslip Entries</RouterLink>
-    </div>
+    </div> -->
+    <Dropdown title="Payslip Entries" :items="payslipEntries"></Dropdown>
     <Dropdown title="Tax and Other Tables" :items="taxAndOtherTables"></Dropdown>
     <div class="menu-item">
       <RouterLink to="process-payroll">Process Payroll</RouterLink>

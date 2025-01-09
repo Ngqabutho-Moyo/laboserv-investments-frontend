@@ -4,11 +4,12 @@ import { reactive } from 'vue';
 import axios from 'axios';
 import { useToast } from 'vue-toastification'
 import router from '@/router';
+import store from '@/store';
 
 defineProps({
   title: {
     type: String,
-    default: 'Payroll Form'
+    default: 'Payslip'
   }
 })
 
@@ -16,10 +17,12 @@ const toast = useToast()
 const createPayrollURL = 'http://localhost:5000/api/payrolls/create'
 const getEmployeeURL = 'http://localhost:5000/api/employee'
 const getPayrollURL = 'http://localhost:5000/api/payroll'
+const date = new Date()
+const year = date.getFullYear()
 
 const form = reactive({
   month: 'Month',
-  year: null,
+  year: year,
   firstName: null,
   surname: null,
   worksNumber: null,
@@ -41,12 +44,35 @@ const form = reactive({
   commission: null,
 });
 
+const employeeData: object | undefined = {}
+
+const autocomplete = async () => {
+  const getEmployeeParams = {
+    params: {
+      firstName: form['firstName'],
+      surname: form['surname']
+    }
+  }
+
+  axios.get(getEmployeeURL, getEmployeeParams).then(response => {
+    const jsonData = response.data
+    if (jsonData) {
+      console.log(jsonData['firstName' as keyof typeof jsonData])
+    }
+  }).catch(error => {
+    if (error.response.status == 404) {
+      toast.warning(`${form['firstName']} ${form['surname']} does not exist`)
+    }
+    else {
+      toast.error('Failed to fetch employee data')
+    }
+  })
+
+  // form['firstName'] = null
+  // form['surname'] = null
+}
 
 const handleSubmit = async () => {
-  /**Before we create a new payroll, we need to validate 2 things:
-   * 1. Does the employee exist in the employees table?
-   * 2. Has the payroll for that moth and year already been created?
-   */
   const getEmployeeParams = {
     params: {
       firstName: form['firstName'],
@@ -61,63 +87,78 @@ const handleSubmit = async () => {
       surname: form['surname'],
       month: form['month'],
       year: form['year']
-
     }
   }
 
-  // Does the payslip already exist?
-  axios.get(getPayrollURL, getPayrollParams).then(response => {
+  axios.get(getEmployeeURL, getEmployeeParams).then(response => {
     const jsonData = response.data
-    console.log(jsonData)
-    if (!jsonData) {
-      // Does the employee exist in the employees table?
-      axios.get(getEmployeeURL, getEmployeeParams).then(response => {
-        const jsonData = response.data
-        if (response.status == 200) {
-          if (form['idNumber'] == jsonData['nationalID']) {
-            if (form['firstName'] == jsonData['firstName'] && form['surname'] == jsonData['surname']) {
-              // Do the payslip details match those in the employee table?
-              if (form['NSSANumber'] == jsonData['ssnNumber'] && form['dateJoined'] == jsonData['startDate'] && form['basePay'] == jsonData['pobsInsurableEarnings']) {
-                // Create the payslip
-                axios.post(createPayrollURL, form).then(() => {
-                  toast.success('Payslip created successfully!')
-                  router.push('/')
-                }).catch(error => {
-                  toast.error('Failed to create the payslip')
-                  console.log(error.response.data)
-                })
-              } else {
-                toast.warning('One of NSSA number, date joined or base pay does not match what is in the employee table')
-              }
-            } else {
-              toast.warning(`${form['firstName']} ${form['surname']} does not exist in the employee table`)
-            }
-          }
-          else {
-            toast.warning(`Employee with ID ${form['idNumber']} does not exist`)
-          }
-        }
-        else {
-          toast.error(`${form['firstName']} ${form['surname']} does not exist in the employees table`)
-        }
-      }).catch(error => {
-        if (error.response.status == 404) {
-          toast.warning(`${form['firstName']} ${form['surname']} does not exist in the employees table`)
-        }
-        console.log(error.response.data)
-      })
-    }
-    else {
-      toast.warning(`Payslip for ${form['firstName']} ${form['surname']} for ${form['month']} ${form['year']} already exists`)
-    }
+    console.log(employeeData)
   }).catch(error => {
     if (error.response.status == 404) {
-      console.log('Create the payslip')
-    } else {
-      console.log(error.response.data)
+      toast.warning(`${form['firstName']} does not exist`)
+    }
+    else {
+      toast.error('Failed to fetch employee data')
     }
   })
+
+  // Does the payslip already exist?
+  // axios.get(getPayrollURL, getPayrollParams).then(response => {
+  //   const jsonData = response.data
+  //   console.log(jsonData)
+  //   if (!jsonData) {
+  //     // Does the employee exist in the employees table?
+  //     axios.get(getEmployeeURL, getEmployeeParams).then(response => {
+  //       const jsonData = response.data
+  //       employeeData = jsonData
+  //       if (response.status == 200) {
+  //         if (form['idNumber'] == jsonData['nationalID']) {
+  //           if (form['firstName'] == jsonData['firstName'] && form['surname'] == jsonData['surname']) {
+  //             // Do the payslip details match those in the employee table?
+  //             if (form['NSSANumber'] == jsonData['ssnNumber'] && form['dateJoined'] == jsonData['startDate'] && form['basePay'] == jsonData['pobsInsurableEarnings']) {
+  //               // Create the payslip
+  //               // console.log(employeeData)
+  //               // axios.post(createPayrollURL, form).then(() => {
+  //               //   toast.success('Payslip created successfully!')
+  //               //   router.push('/')
+  //               // }).catch(error => {
+  //               //   toast.error('Failed to create the payslip')
+  //               //   console.log(error.response.data)
+  //               // })
+  //             } else {
+  //               toast.warning('One of NSSA number, date joined or base pay does not match what is in the employee table')
+  //             }
+  //           } else {
+  //             toast.warning(`${form['firstName']} ${form['surname']} does not exist in the employee table`)
+  //           }
+  //         }
+  //         else {
+  //           toast.warning(`Employee with ID ${form['idNumber']} does not exist`)
+  //         }
+  //       }
+  //       else {
+  //         toast.error(`${form['firstName']} ${form['surname']} does not exist in the employees table`)
+  //       }
+  //     }).catch(error => {
+  //       if (error.response.status == 404) {
+  //         toast.warning(`${form['firstName']} ${form['surname']} does not exist in the employees table`)
+  //       }
+  //       console.log(error.response.data)
+  //     })
+  //   }
+  //   else {
+  //     toast.warning(`Payslip for ${form['firstName']} ${form['surname']} for ${form['month']} ${form['year']} already exists`)
+  //   }
+  // }).catch(error => {
+  //   if (error.response.status == 404) {
+  //     console.log('Create the payslip')
+  //   } else {
+  //     console.log(error.response.data)
+  //   }
+  // })
+
 }
+
 </script>
 
 <style>
@@ -138,10 +179,26 @@ input[type=number] {
   <div class="mb-10">
     <Navbar></Navbar>
   </div>
-  <section class="bg-white w-auto mx-60 my-30">
+  <section class="bg-white w-auto mx-60 my-30 py-15">
     <div class="container m-auto max-w-4xl">
       <div class="bg-white px-12 py-8 mb-8 shadow-md rounded-md border m-4 md:m-0">
-        <form @submit.prevent="handleSubmit">
+        <div>
+          <h2 class="text-3l text-center font-semibold mb-6">Autocomplete Form</h2>
+          <div class="mb-4 grid grid-cols-2 gap-2">
+            <input type="text" v-model="form.firstName" id="firstName" name="firstName"
+              class="border rounded w-full py-2 px-3 mb-2" placeholder="First name" required>
+            <input type="text" v-model="form.surname" id="surname" name="surname"
+              class="border rounded w-full py-2 px-3 mb-2" placeholder="Last name" required>
+          </div>
+          <div>
+            <button @click="autocomplete"
+              class="bg-sky-300 hover:bg-sky-600 text-white font-bold py-4 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
+              type="submit">Search</button>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white px-12 py-8 mb-8 shadow-md rounded-md border m-4 md:m-0">
+        <div>
           <!-- Form title -->
           <h2 class="text-3l text-center font-semibold mb-6">{{ title }}</h2>
 
@@ -162,19 +219,28 @@ input[type=number] {
               <option value="November"> November</option>
               <option value="December"> December</option>
             </select>
-            <input type="text" v-model="form.year" id="year" name="year" class="border rounded w-full py-2 px-3 mb-2"
-              placeholder="Year" required>
+            <select v-model="form.year" id="year" name="year" class="border rounded w-full py-2 px-3" required>
+              <!-- <option value="Year">Year</option> -->
+              <option value="2024">{{ year }}</option>
+              <option value="2025">{{ year + 1 }}</option>
+              <option value="2026">{{ year + 2 }}</option>
+            </select>
+            <!-- <input type="text" v-model="form.year" id="year" name="year" class="border rounded w-full py-2 px-3 mb-2"
+              placeholder="Year" required> -->
           </div>
 
           <!-- 1st row -->
           <div class="mb-4 grid grid-cols-3 gap-3">
-            <input type="text" v-model="form.firstName" id="firstName" name="firstName"
+            <output>{{ employeeData['firstName'] }}</output>
+            <output>{{ employeeData['surname'] }}</output>
+            <!-- <input type="text" v-model="form.firstName" id="firstName" name="firstName"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="First name" required>
             <input type="text" v-model="form.surname" id="surname" name="surname"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Last name" required>
             <input type="text" v-model="form.worksNumber" id="worksNumber" name="worksNumber"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Works #">
+              class="border rounded w-full py-2 px-3 mb-2" placeholder="Works #"> -->
           </div>
+
 
           <!-- 2nd row -->
           <div class="mb-4 grid grid-cols-3 gap-3">
@@ -188,6 +254,9 @@ input[type=number] {
 
           <!-- 3rd row -->
           <div class="mb-4 grid grid-cols-3 gap-3">
+            <!-- <output>{{ employeeData['startDate' as keyof typeof employeeData] }}</output>
+            <output>{{ employeeData['daysTaken' as keyof typeof employeeData] }}</output>
+            <output>{{ employeeData['leaveBalance' as keyof typeof employeeData] }}</output> -->
             <input type="text" v-model="form.dateJoined" id="dateJoined" name="dateJoined"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Date joined (yyyy-mm-dd)" required>
             <input type="number" v-model="form.daysTaken" id="daysTaken" name="daysTaken"
@@ -243,11 +312,11 @@ input[type=number] {
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Commission" required>
           </div>
           <div>
-            <button
+            <button @click="handleSubmit"
               class="bg-sky-300 hover:bg-sky-600 text-white font-bold py-4 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
               type="submit">Submit</button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </section>

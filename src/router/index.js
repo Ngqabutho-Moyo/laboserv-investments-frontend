@@ -4,15 +4,15 @@ import AuditTrailView from '@/views/AuditTrailView.vue'
 import HelpView from '@/views/HelpView.vue'
 import ProcessPayrollView from '@/views/ProcessPayrollView.vue'
 import TaxAndOtherTablesView from '@/views/TaxAndOtherTablesView.vue'
-import CreateNewPayrollView from '@/views/Payroll Files/CreateNewPayrollView1.vue'
+import CreateNewPayslipView from '@/views/Payroll Files/CreateNewPayslipView1.vue'
 import CreateNewEmployeeView from '@/views/Employees/CreateNewEmployeeView.vue'
 import ViewExistingEmployeesView from '@/views/Employees/ViewExistingEmployeesView.vue'
 import DeleteEmployeeView from '@/views/Employees/DeleteEmployeeView.vue'
 import PayrollSummaryView from '@/views/Reports/PayrollSummaryView.vue'
 import MonthlyPayrollSummary from '@/views/Reports/MonthlyPayrollSummary.vue'
 import TaxTablesView from '@/views/Tax and Other Tables/TaxTablesView.vue'
-import OpenExistingPayrollView from '@/views/Payroll Files/OpenExistingPayrollView.vue'
-import OpenMonthlyPayroll from '@/views/Payroll Files/OpenMonthlyPayroll.vue'
+import OpenExistingPayslipsView from '@/views/Payroll Files/OpenExistingPayslipsView.vue'
+import OpenMonthlyPayslips from '@/views/Payroll Files/OpenMonthlyPayslipsView.vue'
 import UpdateEmployeeView from '@/views/Employees/UpdateEmployeeView.vue'
 import UpdatePayrollView from '@/views/Payroll Files/UpdatePayrollView.vue'
 
@@ -55,14 +55,14 @@ const router = createRouter({
       component: DeleteEmployeeView,
     },
     {
-      path: '/open-existing-payroll',
-      name: 'open-existing-payroll',
-      component: OpenExistingPayrollView,
+      path: '/open-existing-payslips',
+      name: 'open-existing-payslips',
+      component: OpenExistingPayslipsView,
     },
     {
-      path: '/open-monthly-payroll',
-      name: 'open-monthly-payroll',
-      component: OpenMonthlyPayroll,
+      path: '/open-monthly-payslips',
+      name: 'open-monthly-payslips',
+      component: OpenMonthlyPayslips,
     },
     {
       path: '/update-payroll',
@@ -102,7 +102,7 @@ const router = createRouter({
     {
       path: '/create-new-payroll',
       name: 'create-new-payroll',
-      component: CreateNewPayrollView,
+      component: CreateNewPayslipView,
     },
   ],
 })

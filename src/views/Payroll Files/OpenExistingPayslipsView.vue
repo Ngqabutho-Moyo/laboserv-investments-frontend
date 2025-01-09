@@ -2,6 +2,8 @@
 import Navbar from '@/components/Navbar.vue';
 import Hero from '@/components/Hero.vue';
 import axios from 'axios'
+import { reactive } from 'vue';
+import { useToast } from 'vue-toastification';
 
 export default {
   components: {
@@ -11,42 +13,44 @@ export default {
   data() {
     return {
       found: false,
-      month: '',
-      year: 0,
+      toast: useToast(),
+      form: reactive({
+        firstName: null,
+      }),
       jsonData: {},
-      url: 'http://localhost:5000/api/payrolls/period',
+      payslipsByName: {},
+      url: 'http://localhost:5000/api/payrolls',
+      payslipsByNameURL: 'http://localhost:5000/api/payrolls/employee',
+    }
+  },
+  methods: {
+    async search() {
+      const payslipsByNameParams = {
+        params: {
+          firstName: this.form['firstName']
+        }
+      }
+      axios.get(this.payslipsByNameURL, payslipsByNameParams).then(response => {
+        this.found = true
+        this.payslipsByName = response.data
+        console.log(`Payslip entries for ${this.form['firstName']}\n${this.payslipsByName}`)
+      }).catch(error => {
+        if (error.response.status == 404) {
+          this.toast.warning(`${this.form['firstName']} does not have a payslip`)
+        }
+        else {
+          this.toast.error('Failed to fetch payslips by name')
+          console.log(error.response.data)
+        }
+      })
     }
   },
   mounted() {
-    const date = new Date()
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-    if (months[date.getMonth()] == 'January') {
-      this.month = 'December'
-      this.year = date.getFullYear() - 1
-    } else {
-      this.month = months[date.getMonth() - 1]
-      this.year = date.getFullYear()
-    }
-
-    const payrollParams = {
-      params: {
-        month: this.month,
-        year: this.year
-      }
-    }
-
-    // this.month = date.toLocaleString('en-us', { month: 'long' })
-    // this.year = date.getFullYear().toString()
-
-    axios.get(this.url, payrollParams).then((response => {
-      if (response.status != 404) {
-        this.found = true
-        console.log(response.data)
-        this.jsonData = response.data
-      }
+    axios.get(this.url).then((response => {
+      console.log(response.data)
+      this.jsonData = response.data
     })).catch(error => {
-      console.log(error.response)
+      console.log(error.response.data)
     })
   }
 };
@@ -57,27 +61,23 @@ export default {
     <Navbar />
   </div>
   <div class="mb-10">
-    <Hero title="Payroll for Last Month" subtitle="Laboserv Investments P/L"></Hero>
-  </div>
-  <div class="grid grid-cols-3 gap-3 py-12">
-    <div></div>
-    <!-- <img v-bind:src="'/src/assets/img/laboserv4.png'"> -->
-    <div>
-      <p><strong>Laboserv Investments P/L</strong></p>
-      <p><strong>PAYROLL FOR {{ month.toUpperCase() }} {{ year }}</strong></p>
-      <p>Averaged for period: IBR=25.59, NSSA Ceiling=17,912.51</p>
+    <Hero title="Existing Payslips" subtitle="Laboserv Investments P/L"></Hero>
+    <div class="mb-10 mt-5">
+      <center>
+        <form @submit.prevent="search">
+          <input type="text" v-model="form.firstName" id="name" name="name" placeholder="Enter a name" required>
+          <button class="ml-5 bg-sky-300 hover:bg-sky-600 text-white rounded py-2 px-4" type="submit">Search</button>
+        </form>
+      </center>
     </div>
-    <div></div>
-    <!-- <img v-bind:src="'/src/assets/logos/NQ labs.png'" style="width: 50px; height: 50px;"> -->
   </div>
-  <div v-if="found == false">
-    <h2>
-      <center>No data</center>
-    </h2>
+  <div class="mt-15 grid grid-cols-3 gap-3">
   </div>
-  <div v-else>
-    <div class='mb-5' v-for="data in jsonData" :key="data">
-      <!-- <center> {{ data['month' as keyof typeof data] }} {{ data['year' as keyof typeof data] }}</center> -->
+  <div v-if="found = true">
+    <div class='mb-5' v-for="data in payslipsByName" :key="data">
+      <div class="mb-12">
+        <h1> {{ data['month' as keyof typeof data] }} {{ data['year' as keyof typeof data] }}</h1>
+      </div>
       <div class="mb-4 grid grid-cols-3 gap-3">
         <img v-bind:src="'/src/assets/img/laboserv4.png'">
         <div>
@@ -138,7 +138,8 @@ export default {
             </td>
             <td style="color:red">AIDS Levy USD:</td>
             <td style="color: red; text-align: right;">{{ parseFloat(data['aidsLevyUSD' as keyof typeof
-              data]).toFixed(2) }}</td>
+              data]).toFixed(2)
+              }}</td>
           </tr>
           <tr>
             <td>Transport Allowance USD:</td>
@@ -146,7 +147,8 @@ export default {
             </td>
             <td style="color:red">NSSA USD:</td>
             <td style="color:red; text-align: right">{{ parseFloat(data['nssaLevyUSD' as keyof typeof data]).toFixed(2)
-              }}</td>
+              }}
+            </td>
           </tr>
           <tr>
             <td>Commission USD:</td>
@@ -179,7 +181,11 @@ export default {
       <hr>
       <hr>
       <hr>
+      <div style="break-after:page"></div>
     </div>
+  </div>
+  <div v-else>
+    <p>No data</p>
   </div>
 </template>
 

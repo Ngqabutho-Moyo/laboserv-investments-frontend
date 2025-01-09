@@ -13,7 +13,7 @@ import PayslipEntries from '@/components/Process Payroll/PayslipEntries.vue';
   </div> -->
   <div>
     <!-- <Hero title="Process Payroll"></Hero> -->
-    <div class="mb-5">
+    <div id="wrapper" class="mb-5">
       <div class="grid grid-cols-1 gap-1 flex space-y-15">
         <PayrollSummary></PayrollSummary>
       </div>
@@ -39,3 +39,36 @@ import PayslipEntries from '@/components/Process Payroll/PayslipEntries.vue';
   </div>
   <!-- <TaxTables></TaxTables> -->
 </template>
+
+<style>
+/* #wrapper {
+  height: 860px;
+  width: 595px;
+  padding-bottom: 950px;
+  margin-left: auto;
+  margin-right: auto;
+} */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4;
+  /* margin: 0; */
+  /* padding: 0; */
+}
+
+/* html,
+body {
+  width: 210mm;
+  height: 297mm;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+</style>
