@@ -14,7 +14,7 @@ export default {
       month: '',
       year: 0,
       jsonData: {},
-      url: 'http://localhost:5000/api/payrolls/period',
+      url: 'http://localhost:5000/api/payslips/period',
     }
   },
   mounted() {
@@ -29,7 +29,7 @@ export default {
       this.year = date.getFullYear()
     }
 
-    const payrollParams = {
+    const payslipParams = {
       params: {
         month: this.month,
         year: this.year
@@ -39,7 +39,7 @@ export default {
     // this.month = date.toLocaleString('en-us', { month: 'long' })
     // this.year = date.getFullYear().toString()
 
-    axios.get(this.url, payrollParams).then((response => {
+    axios.get(this.url, payslipParams).then((response => {
       if (response.status != 404) {
         this.found = true
         console.log(response.data)

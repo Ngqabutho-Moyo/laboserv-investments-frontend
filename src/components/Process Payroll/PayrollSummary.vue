@@ -10,7 +10,7 @@ export default {
       month: '',
       year: 0,
       found: false,
-      url: 'http://localhost:5000/api/payrolls/summary/month',
+      url: 'http://localhost:5000/api/payslips/summary/month',
       wcifUSD: 0.0,
       zimdefUSD: 30.01,
       standardsDevLevyUSD: 0.0,
@@ -43,7 +43,7 @@ export default {
 
     // let found: boolean | undefined = false
 
-    const payrollParams = {
+    const payslipParams = {
       params: {
         month: this.month,
         year: this.year
@@ -54,7 +54,7 @@ export default {
     // this.year = date.getFullYear().toString()
 
     {
-      axios.get(this.url, payrollParams).then((response) => {
+      axios.get(this.url, payslipParams).then((response) => {
         this.jsonData = response.data
         // this.found = true
         console.log(this.month, this.year)

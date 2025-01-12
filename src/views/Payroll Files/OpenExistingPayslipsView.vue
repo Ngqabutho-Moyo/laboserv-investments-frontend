@@ -19,8 +19,8 @@ export default {
       }),
       jsonData: {},
       payslipsByName: {},
-      url: 'http://localhost:5000/api/payrolls',
-      payslipsByNameURL: 'http://localhost:5000/api/payrolls/employee',
+      url: 'http://localhost:5000/api/payslips',
+      payslipsByNameURL: 'http://localhost:5000/api/payslips/employee',
     }
   },
   methods: {

@@ -18,6 +18,7 @@ export default {
   },
   data() {
     const date = new Date();
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const year = date.getFullYear();
     return {
       months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -26,17 +27,17 @@ export default {
       jsonData: {},
       payslipData: {},
       toast: useToast(),
-      createPayslipURL: 'http://localhost:5000/api/payrolls/create',
+      createPayslipURL: 'http://localhost:5000/api/payslips/create',
       getEmployeeURL: 'http://localhost:5000/api/employee',
       putEmployeeURL: 'http://localhost:5000/api/employee/update',
-      getPayslipURL: 'http://localhost:5000/api/payroll',
+      getPayslipURL: 'http://localhost:5000/api/payslip',
       autocompleteForm: reactive({
         firstName: null,
         surname: null,
       }),
       form: reactive({
-        month: 'January',
-        year: (year - 1).toString(),
+        month: months[date.getMonth()],
+        year: year.toString(),
         firstName: null,
         surname: null,
         worksNumber: null,
@@ -109,13 +110,6 @@ export default {
         commission: this.form['commission']
       }
 
-      // const getEmployeeParams = {
-      //   params: {
-      //     firstName: this.form.firstName,
-      //     surname: this.form.surname
-      //   }
-      // };
-
       const getPayslipParams = {
         params: {
           idNumber: this.jsonData['nationalID' as keyof typeof this.jsonData],
@@ -141,7 +135,7 @@ export default {
           if (!this.payslipData) {
             console.log('Create payslip')
             // Create the payslip
-            // console.log(payslipForm)
+            console.log(payslipForm)
             axios.post(this.createPayslipURL, payslipForm).then(() => {
               this.toast.success('Payslip created successfully!')
               router.push('/')
@@ -171,8 +165,6 @@ export default {
       } else {
         this.toast.warning('Fill in all fields')
       }
-      // Does the payslip for the given month and year exist?
-
     }
   }
 };
@@ -214,38 +206,19 @@ input[type=number] {
           </div>
         </form>
       </div>
-      <div v-if="found == true" class="bg-white px-12 py-8 mb-8 shadow-md rounded-md border m-4 md:m-0">
+      <div v-if="found == true" class="bg-white px-12 py-8 mb-8 mt-5 shadow-md rounded-md border m-4 md:m-0">
         <div>
           <!-- Form title -->
           <h2 class="text-3l text-center font-semibold mb-6">{{ title }}</h2>
 
           <!-- Month and year -->
           <div class="mb-4 grid grid-cols-2 gap-2">
-            <!-- <select v-model="form.month" id="month" name="month" class="border rounded w-full py-2 px-3" required>
-              <option value="January">January</option>
-              <option value="February">February</option>
-              <option value="March">March</option>
-              <option value="April">April</option>
-              <option value="May"> May</option>
-              <option value="June"> June</option>
-              <option value="July"> July</option>
-              <option value="August">August</option>
-              <option value="September"> September</option>
-              <option value="October"> October</option>
-              <option value="November"> November</option>
-              <option value="December"> December</option>
-            </select> -->
             <select v-model="form.month" id="month" name="month" class="border rounded w-full py-2 px-3" required>
               <option v-for="month in months" :key="month">{{ month }}</option>
             </select>
             <select v-model="form.year" id="year" name="year" class="border rounded w-full py-2 px-3">
               <option v-for="year in years" :key="year">{{ year }}</option>
             </select>
-            <!-- <select v-model="form.year" id="year" name="year" class="border rounded w-full py-2 px-3" required> -->
-            <!-- <option value="year">Year</option>
-              <option value="2024">2024</option>
-              <option value="2025">2025</option> -->
-            <!-- </select> -->
           </div>
 
           <!-- 1st row -->
@@ -254,13 +227,10 @@ input[type=number] {
               }}</output>
             <output>{{ jsonData['surname' as keyof typeof jsonData] }}</output>
             <output>{{ jsonData['worksNumber' as keyof typeof jsonData] }}</output>
-            <!-- <input type="text" v-model="form.worksNumber" id="worksNumber" name="worksNumber"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Works #"> -->
           </div>
 
           <!-- 2nd row -->
           <div class="mb-4 grid grid-cols-3 gap-3">
-            <!-- <output>{{ jsonData['grade' as keyof typeof jsonData] }}</output> -->
             <input type="text" v-model="form.grade" id="grade" name="grade" class="border rounded w-full py-2 px-3 mb-2"
               placeholder="Grade">
             <output>{{ jsonData['department' as keyof typeof jsonData] }}</output>
@@ -278,7 +248,6 @@ input[type=number] {
 
           <!-- 4th row -->
           <div class="mb-4 grid grid-cols-3 gap-3">
-            <!-- <output>{{ jsonData['loan' as keyof typeof jsonData] }}</output> -->
             <input type="number" v-model="form.loan" id="loan" name="loan" class="border rounded w-full py-2 px-3 mb-2"
               placeholder="Loan" required>
             <output>{{ jsonData['ssnNumber' as keyof typeof jsonData] }}</output>
@@ -309,7 +278,7 @@ input[type=number] {
           </div>
         </div>
       </div>
-      <div v-else class="mb-10">
+      <div v-else class="mb-10 mt-5">
         <center>
           <p>No data</p>
         </center>
