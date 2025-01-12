@@ -36,7 +36,8 @@ export default {
         console.log(`Payslip entries for ${this.form['firstName']}\n${this.payslipsByName}`)
       }).catch(error => {
         if (error.response.status == 404) {
-          this.toast.warning(`${this.form['firstName']} does not have a payslip`)
+          this.toast.warning(`${this.form['firstName']} does not have a payslip yet`)
+          this.found = false
         }
         else {
           this.toast.error('Failed to fetch payslips by name')
@@ -65,7 +66,8 @@ export default {
     <div class="mb-10 mt-5">
       <center>
         <form @submit.prevent="search">
-          <input type="text" v-model="form.firstName" id="name" name="name" placeholder="Enter a name" required>
+          <input class="py-2 px-4" type="text" v-model="form.firstName" id="name" name="name" placeholder="Enter a name"
+            required>
           <button class="ml-5 bg-sky-300 hover:bg-sky-600 text-white rounded py-2 px-4" type="submit">Search</button>
         </form>
       </center>
@@ -73,7 +75,7 @@ export default {
   </div>
   <div class="mt-15 grid grid-cols-3 gap-3">
   </div>
-  <div v-if="found = true">
+  <div v-if="found == true">
     <div class='mb-5' v-for="data in payslipsByName" :key="data">
       <div class="mb-12">
         <h1> {{ data['month' as keyof typeof data] }} {{ data['year' as keyof typeof data] }}</h1>
@@ -185,7 +187,9 @@ export default {
     </div>
   </div>
   <div v-else>
-    <p>No data</p>
+    <center>
+      <p>No data</p>
+    </center>
   </div>
 </template>
 

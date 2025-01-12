@@ -17,17 +17,17 @@ import PayslipEntries from '@/components/Process Payroll/PayslipEntries.vue';
       <div class="grid grid-cols-1 gap-1 flex space-y-15">
         <PayrollSummary></PayrollSummary>
       </div>
-      <div class="grid grid-cols-4 gap-4">
+      <div class="grid grid-cols-4 gap-4 py-8">
         <p><strong>Initiated by</strong></p>
-        <p>................................................</p>
+        <p>.........................................</p>
         <p><strong>Confirmed by Pride Maguta</strong></p>
-        <p>...............................................</p>
+        <p>.........................................</p>
       </div>
       <div class="grid grid-cols-4 gap-4">
         <p><strong>Verified by Pride Maguta</strong></p>
-        <p>................................................</p>
+        <p>..........................................</p>
         <p><strong>Approved by Pride Maguta</strong></p>
-        <p>...............................................</p>
+        <p>..........................................</p>
       </div>
     </div>
     <div style="break-after:page"></div>
@@ -57,8 +57,6 @@ import PayslipEntries from '@/components/Process Payroll/PayslipEntries.vue';
 
 @page {
   size: A4;
-  /* margin: 0; */
-  /* padding: 0; */
 }
 
 /* html,

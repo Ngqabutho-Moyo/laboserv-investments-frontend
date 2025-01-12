@@ -20,6 +20,8 @@ export default {
     const date = new Date();
     const year = date.getFullYear();
     return {
+      months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      years: [(year - 1).toString(), year.toString(), (year + 1).toString(), (year + 2).toString(), (year + 3).toString(), (year + 4).toString(), (year + 5).toString()],
       found: false,
       jsonData: {},
       payslipData: {},
@@ -33,8 +35,8 @@ export default {
         surname: null,
       }),
       form: reactive({
-        month: 'Month',
-        year: year,
+        month: 'January',
+        year: (year - 1).toString(),
         firstName: null,
         surname: null,
         worksNumber: null,
@@ -81,21 +83,6 @@ export default {
           console.log(error.response.data)
         }
       })
-
-      // try {
-      //   const response = await axios.get(this.getEmployeeURL, getEmployeeParams);
-      //   this.jsonData = response.data;
-      //   if (this.jsonData) {
-      //     this.found = true
-      //     // console.log(this.jsonData['firstName']);
-      //   }
-      // } catch (error) {
-      //   if (error == 'Employee could not be found') {
-      //     this.toast.warning(`${this.form.firstName} ${this.form.surname} does not exist`);
-      //   } else {
-      //     this.toast.error('Failed to fetch employee data');
-      //   }
-      // }
     },
     async handleSubmit() {
       const payslipForm = {
@@ -147,10 +134,12 @@ export default {
       }
 
       // Have all the fields been filled in?
-      if (payslipForm.grade != null || payslipForm.daysTaken != null || payslipForm.leaveBalance != null || payslipForm.loan != null || payslipForm.basePay != null || payslipForm.housingAllowance != null || payslipForm.transportAllowance != null || payslipForm.commission != null) {
+      if (payslipForm.month != null || payslipForm.year != null || payslipForm.grade != null || payslipForm.daysTaken != null || payslipForm.leaveBalance != null || payslipForm.loan != null || payslipForm.basePay != null || payslipForm.housingAllowance != null || payslipForm.transportAllowance != null || payslipForm.commission != null) {
+        // Does the payslip for that month and year for the given employee exist?
         axios.get(this.getPayslipURL, getPayslipParams).then(response => {
           this.payslipData = response.data
           if (!this.payslipData) {
+            console.log('Create payslip')
             // Create the payslip
             // console.log(payslipForm)
             axios.post(this.createPayslipURL, payslipForm).then(() => {
@@ -163,6 +152,7 @@ export default {
 
             // Update base pay (if necessary)
             if (this.form['basePay'] != this.jsonData['pobsInsurableEarnings' as keyof typeof this.jsonData]) {
+              console.log(`Base pay:\t${this.form['basePay']}\nEarnings:\t${this.jsonData['pobsInsurableEarnings' as keyof typeof this.jsonData]}`)
               axios.put(this.putEmployeeURL, putEmployeeParams).then(() => {
                 this.toast.info('Base pay has been updated')
                 // router.push('/')
@@ -231,8 +221,7 @@ input[type=number] {
 
           <!-- Month and year -->
           <div class="mb-4 grid grid-cols-2 gap-2">
-            <select v-model="form.month" id="month" name="month" class="border rounded w-full py-2 px-3" required>
-              <option value="Month"> Month</option>
+            <!-- <select v-model="form.month" id="month" name="month" class="border rounded w-full py-2 px-3" required>
               <option value="January">January</option>
               <option value="February">February</option>
               <option value="March">March</option>
@@ -245,12 +234,18 @@ input[type=number] {
               <option value="October"> October</option>
               <option value="November"> November</option>
               <option value="December"> December</option>
+            </select> -->
+            <select v-model="form.month" id="month" name="month" class="border rounded w-full py-2 px-3" required>
+              <option v-for="month in months" :key="month">{{ month }}</option>
             </select>
-            <select v-model="form.year" id="year" name="year" class="border rounded w-full py-2 px-3" required>
-              <option value="year">Year</option>
+            <select v-model="form.year" id="year" name="year" class="border rounded w-full py-2 px-3">
+              <option v-for="year in years" :key="year">{{ year }}</option>
+            </select>
+            <!-- <select v-model="form.year" id="year" name="year" class="border rounded w-full py-2 px-3" required> -->
+            <!-- <option value="year">Year</option>
               <option value="2024">2024</option>
-              <option value="2025">2025</option>
-            </select>
+              <option value="2025">2025</option> -->
+            <!-- </select> -->
           </div>
 
           <!-- 1st row -->
@@ -270,12 +265,6 @@ input[type=number] {
               placeholder="Grade">
             <output>{{ jsonData['department' as keyof typeof jsonData] }}</output>
             <output>{{ jsonData['nationalID' as keyof typeof jsonData] }}</output>
-            <!-- <input type="text" v-model="form.grade" id="grade" name="grade" class="border rounded w-full py-2 px-3 mb-2"
-              placeholder="Grade">
-            <input type="text" v-model="form.department" id="department" name="department"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Department" required>
-            <input type="text" v-model="form.idNumber" id="idNumber" name="idNumber"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="ID number" required> -->
           </div>
 
           <!-- 3rd row -->
@@ -285,10 +274,6 @@ input[type=number] {
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Days taken" required>
             <input type="number" v-model="form.leaveBalance" id="leaveBalance" name="leaveBalance"
               class="border rounded w-full py-2 px-3 mb-2" placeholder="Leave balance" required>
-            <!-- <output>{{ jsonData['daysTaken' as keyof typeof jsonData] }}</output> -->
-            <!-- <output>{{ jsonData['leaveBalance' as keyof typeof jsonData] }}</output> -->
-            <!-- <input type="text" v-model="form.dateJoined" id="dateJoined" name="dateJoined"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Date joined (yyyy-mm-dd)" required-->
           </div>
 
           <!-- 4th row -->
@@ -298,11 +283,6 @@ input[type=number] {
               placeholder="Loan" required>
             <output>{{ jsonData['ssnNumber' as keyof typeof jsonData] }}</output>
             <output>{{ jsonData['medicalAidNumber' as keyof typeof jsonData] }}</output>
-            <!--
-            <input type="text" v-model="form.NSSANumber" id="NSSANumber" name="NSSANumber"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="NSSA Number" required>
-            <input type="text" v-model="form.medicalAidNumber" id="medicalAidNumber" name="medicalAidNumber"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Medical aid #"> -->
           </div>
 
           <!-- 5th row -->
@@ -310,28 +290,6 @@ input[type=number] {
             <output>{{ jsonData['bank' as keyof typeof jsonData] }}</output>
             <output>{{ jsonData['branch' as keyof typeof jsonData] }}</output>
             <output>{{ jsonData['accountNumber' as keyof typeof jsonData] }}</output>
-            <!-- <select v-model="form.bank" id="bank" name="bank" class="border rounded w-full py-2 px-3" required>
-              <option value="Bank"> Bank</option>
-              <option value="AgriculturalDevelopmentBankOfZimbabwe"> Agricultural Development Bank of Zimbabwe</option>
-              <option value="BancABC"> BancABC</option>
-              <option value="Cabs"> Cabs</option>
-              <option value="CBZ"> CBZ</option>
-              <option value="FirstCapital"> First Capital</option>
-              <option value="Ecobank"> Ecobank</option>
-              <option value="FBC"> FBC</option>
-              <option value="Nedbank"> Nedbank</option>
-              <option value="Metbank"> Metbank</option>
-              <option value="NMB"> NMB</option>
-              <option value="Stanbic"> Stanbic</option>
-              <option value="FBCCrownBank"> FBCCrownBank</option>
-              <option value="StewardBank"> Steward Bank</option>
-              <option value="ZB"> ZB</option>
-              <option value="POSB"> POSB</option>
-            </select>
-            <input type="text" v-model="form.branch" id="branch" name="branch"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Branch" required>
-            <input type="text" v-model="form.accountNumber" id="accountNumber" name="accountNumber"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Account number" required> -->
           </div>
 
           <div class="mb-4 grid grid-cols-2 gap-2">
@@ -351,8 +309,10 @@ input[type=number] {
           </div>
         </div>
       </div>
-      <div v-else>
-        <p class="text-center">No data</p>
+      <div v-else class="mb-10">
+        <center>
+          <p>No data</p>
+        </center>
       </div>
     </div>
   </section>

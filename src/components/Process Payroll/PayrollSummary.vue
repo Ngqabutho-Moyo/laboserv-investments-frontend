@@ -56,12 +56,18 @@ export default {
     {
       axios.get(this.url, payrollParams).then((response) => {
         this.jsonData = response.data
+        // this.found = true
         console.log(this.month, this.year)
         if (parseInt(this.jsonData['entries' as keyof typeof this.jsonData]) > 0) {
           this.found = true
         }
-      }).catch((error) => {
-        console.log(error.response)
+      }).catch(error => {
+        if (error.response.status == 404) {
+          console.log('No payslips found for this month')
+        }
+        else {
+          console.log(error.response)
+        }
       })
     }
   }
@@ -80,7 +86,7 @@ export default {
     </div>
     <!-- <img v-bind:src="'/src/assets/logos/NQ labs.png'" style="width: 50px; height: 50px;"> -->
   </div>
-  <div class="mb-40">
+  <div v-if="found == true" class="mb-40">
     <table>
       <thead>
         <tr>
@@ -197,6 +203,11 @@ export default {
         </tr>
       </tbody>
     </table>
+  </div>
+  <div v-else class="mb-20">
+    <center>
+      <p>No data</p>
+    </center>
   </div>
 </template>
 

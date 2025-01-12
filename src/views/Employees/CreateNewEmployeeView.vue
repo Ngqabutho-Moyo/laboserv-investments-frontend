@@ -29,7 +29,7 @@ const form = reactive({
   endDate: null,
   pobsInsurableEarnings: null,
   actualInsurableEarnings: null,
-  department: null,
+  department: 'Department',
   bank: 'Bank',
   branch: null,
   accountNumber: null,
@@ -127,8 +127,12 @@ input[type=number] {
 
           <!-- 6th row -->
           <div class="mb-4 grid grid-cols-2 gap-2">
-            <input type="text" v-model="form.department" id="department" name="department"
-              class="border rounded w-full py-2 px-3 mb-2" placeholder="Department" required>
+            <select v-model="form.department" id="department" name="department" class="border rounded w-full py-2 px-3"
+              required>
+              <option value="Department">Department</option>
+              <option value="Technical">Technical</option>
+              <option value="Management">Management</option>
+            </select>
             <select v-model="form.bank" id="bank" name="bank" class="border rounded w-full py-2 px-3" required>
               <option value="Bank"> Bank</option>
               <option value="AgriculturalDevelopmentBankOfZimbabwe"> Agricultural Development Bank of Zimbabwe</option>

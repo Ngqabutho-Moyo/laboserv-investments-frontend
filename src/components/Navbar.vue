@@ -62,11 +62,11 @@ export default {
         },
         {
           title: 'Open Payslips For Last Month',
-          link: 'open-monthly-payroll',
+          link: 'open-monthly-payslips',
         },
         {
           title: 'Open All Payslips',
-          link: 'open-existing-payroll',
+          link: 'open-existing-payslips',
         },
       ],
       employees: [
