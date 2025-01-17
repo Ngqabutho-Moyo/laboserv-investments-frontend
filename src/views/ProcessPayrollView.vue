@@ -5,6 +5,7 @@ import PayslipEntries from '@/components/Process Payroll/PayslipEntries.vue';
 // import calendar from 'vue-simple-calendar'
 
 // calendar=calendar
+
 </script>
 
 <template>
@@ -14,7 +15,7 @@ import PayslipEntries from '@/components/Process Payroll/PayslipEntries.vue';
   <div>
     <!-- <Hero title="Process Payroll"></Hero> -->
     <div id="wrapper" class="mb-5">
-      <div class="grid grid-cols-1 gap-1 flex space-y-15">
+      <div>
         <PayrollSummary></PayrollSummary>
       </div>
       <div class="grid grid-cols-4 gap-4 py-8">
@@ -35,38 +36,22 @@ import PayslipEntries from '@/components/Process Payroll/PayslipEntries.vue';
       <Employees></Employees>
     </div>
     <div style="break-after:page"></div>
-    <PayslipEntries></PayslipEntries>
+    <div>
+      <PayslipEntries></PayslipEntries>
+    </div>
   </div>
   <!-- <TaxTables></TaxTables> -->
 </template>
 
 <style>
-/* #wrapper {
-  height: 860px;
-  width: 595px;
-  padding-bottom: 950px;
-  margin-left: auto;
-  margin-right: auto;
-} */
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-@page {
+/* @page {
   size: A4;
-}
-
-/* html,
-body {
-  width: 210mm;
-  height: 297mm;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  orientation: landscape;
 } */
 </style>

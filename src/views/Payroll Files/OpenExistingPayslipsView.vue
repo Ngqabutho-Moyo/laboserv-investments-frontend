@@ -78,7 +78,9 @@ export default {
   <div v-if="found == true">
     <div class='mb-5' v-for="data in payslipsByName" :key="data">
       <div class="mb-12">
-        <h1> {{ data['month' as keyof typeof data] }} {{ data['year' as keyof typeof data] }}</h1>
+        <center>
+          <h1> {{ data['month' as keyof typeof data] }} {{ data['year' as keyof typeof data] }}</h1>
+        </center>
       </div>
       <div class="mb-4 grid grid-cols-3 gap-3">
         <img v-bind:src="'/src/assets/img/laboserv4.png'">

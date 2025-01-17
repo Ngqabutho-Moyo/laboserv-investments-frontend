@@ -15,7 +15,7 @@ export default {
       month: '',
       year: 0,
       found: false,
-      url: 'http://localhost:5000/api/payrolls/summary/month',
+      url: 'http://localhost:5000/api/payslips/summary/month',
       wcifUSD: 0.0,
       // zimdefUSD: 30.01,
       standardsDevLevyUSD: 0.0,

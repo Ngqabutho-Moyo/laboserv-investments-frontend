@@ -21,7 +21,7 @@ export default {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const year = date.getFullYear();
     return {
-      months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      months: months,
       years: [(year - 1).toString(), year.toString(), (year + 1).toString(), (year + 2).toString(), (year + 3).toString(), (year + 4).toString(), (year + 5).toString()],
       found: false,
       jsonData: {},

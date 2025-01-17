@@ -124,6 +124,10 @@ export default {
 </template>
 
 <style>
+/* @page {
+  size: landscape;
+} */
+
 table {
   width: 100%;
   font-size: small;
@@ -143,10 +147,3 @@ td {
   padding-left: 1.25%; */
 }
 </style>
-
-<!-- <style>
-th,
-td {
-  padding-right: 1.25%
-}
-</style> -->

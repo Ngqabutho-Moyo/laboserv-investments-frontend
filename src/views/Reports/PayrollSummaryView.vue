@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       jsonData: {},
-      url: 'http://localhost:5000/api/payrolls/summary',
+      url: 'http://localhost:5000/api/payslips/summary',
       wcifUSD: 0.0,
       zimdefUSD: 0.0,
       standardsDevLevyUSD: 0.0,

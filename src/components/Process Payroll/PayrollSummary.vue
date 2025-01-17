@@ -216,4 +216,10 @@ th,
 td {
   padding-right: 1.25%
 }
+
+#div1,
+#div2 {
+  position: relative;
+  /* z-index: 1; */
+}
 </style>
