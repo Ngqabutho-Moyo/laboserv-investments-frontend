@@ -14,7 +14,7 @@ export default {
       month: '',
       year: 0,
       jsonData: {},
-      url: 'http://localhost:5000/api/payslips/period',
+      url: 'http://localhost:5001/api/payslips/period',
     }
   },
   mounted() {
@@ -113,7 +113,7 @@ export default {
       <!-- 4th row -->
       <div class="mb-4 grid grid-cols-3 gap-3">
         <p><strong>Loan:</strong> {{ data['loan' as keyof typeof data] }}</p>
-        <p><strong>NSSA No: </strong> {{ data['NSSANumber' as keyof typeof data] }}</p>
+        <p><strong>NSSA No: </strong> {{ data['SSNNumber' as keyof typeof data] }}</p>
         <p><strong>Medical Aid No</strong> {{ data['medicalAidNumber' as keyof typeof data] }}</p>
       </div>
       <!-- 5th row -->
@@ -146,7 +146,7 @@ export default {
             </td>
             <td style="color:red">NSSA USD:</td>
             <td style="color:red; text-align: right">{{ parseFloat(data['nssaLevyUSD' as keyof typeof data]).toFixed(2)
-              }}</td>
+            }}</td>
           </tr>
           <tr>
             <td>Commission USD:</td>

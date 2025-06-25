@@ -14,9 +14,9 @@ export default {
     return {
       jsonData: {},
       deductions: {},
-      getEmployeeURL: 'http://localhost:5000/api/payroll/',
-      getEmployeesURL: 'http://localhost:5000/api/employees/',
-      getDeductionsURL: 'http://localhost:5000/api/employees/deductions'
+      getEmployeeURL: 'http://localhost:5001/api/payroll/',
+      getEmployeesURL: 'http://localhost:5001/api/employees/',
+      getDeductionsURL: 'http://localhost:5001/api/employees/deductions'
     }
   },
 

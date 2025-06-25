@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       jsonData: {},
-      url: 'http://localhost:5000/api/payslips/summary',
+      url: 'http://localhost:5001/api/payslips/summary',
       wcifUSD: 0.0,
       zimdefUSD: 0.0,
       standardsDevLevyUSD: 0.0,
@@ -45,7 +45,7 @@ export default {
     <img v-bind:src="'/src/assets/img/laboserv4.png'">
     <div>
       <p><strong>Laboserv Investments P/L</strong></p>
-      <p><strong>PAYROLL SUMMARY SINCE JANUARY 2024</strong></p>
+      <p><strong>PAYROLL SUMMARY SINCE JANUARY 2025</strong></p>
       <p>Averaged for period: IBR=25.59, NSSA Ceiling=17,912.51</p>
     </div>
     <!-- <img v-bind:src="'/src/assets/logos/NQ labs.png'" style="width: 50px; height: 50px;"> -->
@@ -87,7 +87,7 @@ export default {
           <td>Housing Allowance USD</td>
           <td>{{ jsonData['entries' as keyof typeof jsonData] }}</td>
           <td style="text-align: right;">{{ parseFloat(jsonData['housingAllowance' as keyof typeof jsonData]).toFixed(2)
-            }}</td>
+          }}</td>
           <td>NSSA USD</td>
           <td>{{ jsonData['entries' as keyof typeof jsonData] }}</td>
           <td style="text-align: right;">{{ parseFloat(jsonData['nssaLevyUSD' as keyof typeof jsonData]).toFixed(2) }}
@@ -132,7 +132,7 @@ export default {
           <td></td>
           <td>Standards Dev Levy USD</td>
           <td style="text-align: right;">{{ parseFloat(jsonData['standardsDevLevy' as keyof typeof jsonData]).toFixed(2)
-            }}</td>
+          }}</td>
         </tr>
         <tr>
           <td></td>

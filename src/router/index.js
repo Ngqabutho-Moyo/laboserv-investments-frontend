@@ -4,7 +4,7 @@ import AuditTrailView from '@/views/AuditTrailView.vue'
 import HelpView from '@/views/HelpView.vue'
 import ProcessPayrollView from '@/views/ProcessPayrollView.vue'
 import TaxAndOtherTablesView from '@/views/TaxAndOtherTablesView.vue'
-import CreateNewPayslipView from '@/views/Payroll Files/CreateNewPayslipView1.vue'
+import CreateNewPayslipView from '@/views/Payroll Files/CreateNewPayslipView.vue'
 import CreateNewEmployeeView from '@/views/Employees/CreateNewEmployeeView.vue'
 import ViewExistingEmployeesView from '@/views/Employees/ViewExistingEmployeesView.vue'
 import DeleteEmployeeView from '@/views/Employees/DeleteEmployeeView.vue'
@@ -100,8 +100,8 @@ const router = createRouter({
       component: AuditTrailView,
     },
     {
-      path: '/create-new-payroll',
-      name: 'create-new-payroll',
+      path: '/create-new-payslip',
+      name: 'create-new-payslip',
       component: CreateNewPayslipView,
     },
   ],

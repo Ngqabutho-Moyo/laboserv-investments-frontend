@@ -19,7 +19,7 @@ export default {
           link: 'open-monthly-payslips'
         },
         {
-          title: 'Since January 2024',
+          title: 'Since January 2025',
           link: 'open-existing-payslips'
         }
       ],
@@ -46,7 +46,7 @@ export default {
         },
         {
           title: 'Create New Payslip',
-          link: 'create-new-payroll',
+          link: 'create-new-payslip',
         },
         // {
         //   title: 'Update Existing Payroll',

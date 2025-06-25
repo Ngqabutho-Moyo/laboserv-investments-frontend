@@ -19,8 +19,8 @@ export default {
       }),
       jsonData: {},
       payslipsByName: {},
-      url: 'http://localhost:5000/api/payslips',
-      payslipsByNameURL: 'http://localhost:5000/api/payslips/employee',
+      url: 'http://localhost:5001/api/payslips',
+      payslipsByNameURL: 'http://localhost:5001/api/payslips/employee',
     }
   },
   methods: {
@@ -143,7 +143,7 @@ export default {
             <td style="color:red">AIDS Levy USD:</td>
             <td style="color: red; text-align: right;">{{ parseFloat(data['aidsLevyUSD' as keyof typeof
               data]).toFixed(2)
-              }}</td>
+            }}</td>
           </tr>
           <tr>
             <td>Transport Allowance USD:</td>
@@ -151,7 +151,7 @@ export default {
             </td>
             <td style="color:red">NSSA USD:</td>
             <td style="color:red; text-align: right">{{ parseFloat(data['nssaLevyUSD' as keyof typeof data]).toFixed(2)
-              }}
+            }}
             </td>
           </tr>
           <tr>

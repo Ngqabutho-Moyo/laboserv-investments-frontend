@@ -14,7 +14,7 @@ defineProps({
 })
 
 const toast = useToast()
-const postEmployeeURL = 'http://localhost:5000/api/employees/create'
+const postEmployeeURL = 'http://localhost:5001/api/employees/create'
 const banks = ['Bank', 'Agricultural Development Bank of Zimbabwe', 'BancABC', 'Cabs', 'CBZ', 'First Capital', 'Ecobank', 'FBC', 'Nedbank',
   'Metbank', 'NMB', 'Stanbic', 'FBCCrownBank', 'Steward Bank', 'ZB', 'POSB',]
 const departments = ['Department', 'Technical', 'Management', 'Administration']
